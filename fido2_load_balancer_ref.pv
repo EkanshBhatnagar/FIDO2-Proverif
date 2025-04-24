@@ -1,0 +1,137 @@
+type Username.
+type Nonce.
+type RpId.
+type ClientId.
+type Packet.
+type key.
+type skey.
+type pkey.
+type sskey.
+type spkey.
+type AAGUID.
+
+free reveal: channel.
+free C_LB: channel [private].
+free LB_RP: channel [private].
+free A_C: channel [private].
+
+fun UsernameToPacket(Username):Packet [typeConverter].
+fun Client1(RpId, Nonce): bitstring [data].
+fun Auth1(Username, RpId, sskey):bitstring [data].
+fun Auth2(bitstring, AAGUID, bitstring, spkey): bitstring [data].
+fun Auth3(bitstring,bitstring): bitstring [data].
+
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+reduc forall m: bitstring, sk: skey; adec(aenc(m,pk(sk)),sk) = m.
+
+fun spk(sskey):spkey.
+fun sign(bitstring,sskey): bitstring.
+const OK:bitstring.
+fun checksign(bitstring,bitstring,spkey):bitstring
+reduc forall m: bitstring, ssk: sskey; checksign(sign(m,ssk),m,spk(ssk)) = OK.
+
+fun senc(bitstring,key):bitstring.
+fun sdec(bitstring,key):bitstring
+reduc forall m:bitstring, k:key; sdec(senc(m,k),k) = m.
+
+
+fun HMAC(key,bitstring):bitstring.
+fun hash(bitstring):bitstring.
+fun h(RpId): bitstring.
+table rp_record(Username, AAGUID, bitstring, spkey).
+
+event Client_Init_Reg(Username, RpId).
+event Authnr_Finish_Reg(Username,RpId,AAGUID,bitstring,spkey).
+event Server_Finish_Reg(Username,RpId,AAGUID,bitstring,spkey).
+
+free sanity1:bitstring [private].
+free sanity2:bitstring [private].
+free sanity3:bitstring [private].
+
+query attacker(sanity1).
+query attacker(sanity2).
+query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; 
+inj-event(Server_Finish_Reg(u,r,a,c,pkau)) ==> inj-event(Client_Init_Reg(u,r)).
+
+
+let RP_Reg(rpid:RpId) =
+    new challenge:Nonce;
+    
+    in(LB_RP, username:Username);
+        
+    out(LB_RP, (username, challenge, rpid));
+    (* out(LB_RP, (aData, sig, cdata)) *)
+    in(LB_RP, (aData:bitstring, sig:bitstring, cdata:bitstring));
+    out(reveal, sanity1);
+    
+    if Client1(rpid, challenge) = cdata then
+    
+    let Auth2(h_rpid, aaguid, credID, pkA) = aData in
+    if checksign(sig, Auth3(aData,hash(cdata)), pkA) = OK then
+    insert rp_record(username, aaguid, credID, pkA);
+    event Server_Finish_Reg(username,rpid,aaguid,credID,pkA)
+.
+
+let Client_Reg(client_id:ClientId, pinUVAuthToken:key) = 
+    new username:Username;
+    out(C_LB, username);
+    in(C_LB, (username_rp:Username,challenge:Nonce,rpid:RpId));
+    event Client_Init_Reg(username, rpid);
+    if username = username_rp then
+    
+    let cdata = Client1(rpid, challenge) in
+    let pinAuth = (HMAC(pinUVAuthToken,hash(cdata))) in
+    out(A_C, (cdata,pinAuth, username));
+    
+    in(A_C, (aData:bitstring, sig:bitstring));
+
+    out(C_LB, (aData, sig, cdata))
+
+.
+
+let Auth_Reg(aaguid:AAGUID, wk:key, pinAuthToken:key) = 
+    in(A_C, (cdata:bitstring,pinAuth:bitstring, username:Username));
+    
+    if pinAuth = HMAC(pinAuthToken, hash(cdata)) then
+    
+    new skA:sskey;
+    let pkA = spk(skA) in
+    
+
+    let Client1(rpid, challenge) = cdata in 
+    
+    let credID = senc(Auth1(username, rpid, skA), wk) in
+    
+    let aData = Auth2(h(rpid), aaguid, credID, pkA) in
+    
+    let sig = sign(Auth3(aData,hash(cdata)),skA) in
+    
+    out(A_C, (aData, sig));
+    
+    event Authnr_Finish_Reg(username,rpid,aaguid,credID,pkA)
+.
+
+
+(* Sanity: Works *)
+let LoadBalancer() =
+    
+    in(C_LB, username:Username);
+    out(reveal, username);
+    out(LB_RP, username);
+    in(LB_RP, (username_rp:Username, challenge:Nonce, rpid:RpId));
+    out(reveal, (username_rp,challenge,rpid));
+    out(C_LB, (username_rp,challenge,rpid));
+    in(C_LB, (aData:bitstring, sig:bitstring, cdata:bitstring));
+    out(reveal, (aData, sig, cdata));
+    out(LB_RP, (aData, sig, cdata));
+    out(reveal, sanity2)
+.
+
+process
+    new rpid:RpId;
+    new clientid:ClientId;
+    new pinAuth:key;
+    new wk:key;
+    new aaguid:AAGUID;
+    RP_Reg(rpid) | Client_Reg(clientid, pinAuth) | LoadBalancer() | Auth_Reg(aaguid, wk, pinAuth)

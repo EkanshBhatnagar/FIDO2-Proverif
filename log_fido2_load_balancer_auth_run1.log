@@ -1,0 +1,540 @@
+File "fido2_load_balancer_auth.pv", line 128, characters 23-28:
+Warning: identifier aaguid rebound.
+File "fido2_load_balancer_auth.pv", line 128, characters 31-36:
+Warning: identifier credID rebound.
+File "fido2_load_balancer_auth.pv", line 128, characters 39-41:
+Warning: identifier pkA rebound.
+Process 0 (that is, the initial process):
+{1}new rpid: RpId;
+{2}new clientid: ClientId;
+{3}new pinAuth: key;
+{4}new wk: key;
+{5}new aaguid: AAGUID;
+{6}new username: Username;
+{7}new skA: sskey;
+{8}let credID: bitstring = senc(Auth1(username,rpid,skA),wk) in
+{9}insert rp_record(username,aaguid,credID,spk(skA));
+{10}insert auth_record(credID);
+(
+    {11}!
+    {12}let rpid_1: RpId = rpid in
+    {13}in(LB_RP, username_1: Username);
+    {23}get rp_record(=username_1,aaguid_1: AAGUID,credID_1: bitstring,pkA: spkey) in
+    {14}new challenge: Nonce;
+    {15}out(LB_RP, (rpid_1,challenge,credID_1));
+    {16}in(LB_RP, (aData: bitstring,sig: bitstring,cdata: bitstring));
+    {17}if (Client1(rpid_1,challenge) = cdata) then
+    {18}let Auth2(h_rpid: bitstring,aaguid_2: AAGUID,credID_2: bitstring,pkA_1: spkey) = aData in
+    {19}if (h_rpid = h(rpid_1)) then
+    {20}if (checksign(sig,Auth3(aData,hash(cdata)),pkA_1) = OK) then
+    {21}event Server_Finish_Auth(username_1,rpid_1,aaguid_2,credID_2,pkA_1);
+    {22}out(LB_RP, bear_token)
+) | (
+    {24}!
+    {25}let client_id: ClientId = clientid in
+    {26}let pinUVAuthToken: key = pinAuth in
+    {27}let username_2: Username = username in
+    {28}out(C_LB, username_2);
+    {29}in(C_LB, (rpid_2: RpId,challenge_1: Nonce,credID_3: bitstring));
+    {30}let cdata_1: bitstring = Client1(rpid_2,challenge_1) in
+    {31}let pinAuth_1: bitstring = HMAC(pinUVAuthToken,hash(cdata_1)) in
+    {32}event Client_Init_Auth(username_2,rpid_2);
+    {33}out(A_C, (hash(cdata_1),credID_3,pinAuth_1));
+    {34}in(A_C, (aData_1: bitstring,sig_1: bitstring));
+    {35}out(C_LB, (aData_1,sig_1,cdata_1));
+    {36}in(C_LB, access_token: bitstring)
+) | (
+    {37}!
+    {38}let aaguid_3: AAGUID = aaguid in
+    {39}let wk_1: key = wk in
+    {40}let pinAuthToken: key = pinAuth in
+    {41}in(A_C, (hcdata: bitstring,credID_4: bitstring,pinAuth_2: bitstring));
+    {48}get auth_record(x: bitstring) suchthat (x = credID_4) in
+    {42}if (pinAuth_2 = HMAC(pinAuthToken,hcdata)) then
+    {43}let Auth1(username_3: Username,rpid_3: RpId,skA_1: sskey) = sdec(credID_4,wk_1) in
+    {44}let aData_2: bitstring = Auth2(h(rpid_3),aaguid_3,credID_4,spk(skA_1)) in
+    {45}let sig_2: bitstring = sign(Auth3(aData_2,hcdata),skA_1) in
+    {46}event Authnr_Finish_Auth(username_3,aaguid_3,credID_4,spk(skA_1));
+    {47}out(A_C, (aData_2,sig_2))
+) | (
+    {49}!
+    {50}in(C_LB, username_4: Username);
+    {51}out(reveal, sanity1);
+    {52}out(LB_RP, username_4);
+    {53}in(LB_RP, (rpid_4: RpId,challenge_2: Nonce,credID_5: bitstring));
+    {54}out(reveal, (rpid_4,challenge_2,credID_5));
+    {55}out(C_LB, (rpid_4,challenge_2,credID_5));
+    {56}in(C_LB, (aData_3: bitstring,sig_3: bitstring,cdata_2: bitstring));
+    {57}out(reveal, (aData_3,sig_3,cdata_2));
+    {58}out(LB_RP, (aData_3,sig_3,cdata_2));
+    {59}in(LB_RP, token: bitstring);
+    {60}out(reveal, token);
+    {61}out(C_LB, token)
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}new rpid: RpId;
+{2}new clientid: ClientId;
+{3}new pinAuth: key;
+{4}new wk: key;
+{5}new aaguid: AAGUID;
+{6}new username: Username;
+{7}new skA: sskey;
+{8}let credID: bitstring = senc(Auth1(username,rpid,skA),wk) in
+{9}insert rp_record(username,aaguid,credID,spk(skA));
+{10}insert auth_record(credID);
+(
+    {11}!
+    {13}in(LB_RP, username_1: Username);
+    {23}get rp_record(=username_1,aaguid_1: AAGUID,credID_1: bitstring,pkA: spkey) in
+    {14}new challenge: Nonce;
+    {12}let rpid_1: RpId = rpid in
+    {15}out(LB_RP, (rpid_1,challenge,credID_1));
+    {16}in(LB_RP, (aData: bitstring,sig: bitstring,cdata: bitstring));
+    {17}if (Client1(rpid_1,challenge) = cdata) then
+    {18}let Auth2(h_rpid: bitstring,aaguid_2: AAGUID,credID_2: bitstring,pkA_1: spkey) = aData in
+    {19}if (h_rpid = h(rpid_1)) then
+    {20}if (checksign(sig,Auth3(aData,hash(cdata)),pkA_1) = OK) then
+    {21}event Server_Finish_Auth(username_1,rpid_1,aaguid_2,credID_2,pkA_1);
+    {22}out(LB_RP, bear_token)
+) | (
+    {24}!
+    {27}let username_2: Username = username in
+    {28}out(C_LB, username_2);
+    {29}in(C_LB, (rpid_2: RpId,challenge_1: Nonce,credID_3: bitstring));
+    {32}event Client_Init_Auth(username_2,rpid_2);
+    {30}let cdata_1: bitstring = Client1(rpid_2,challenge_1) in
+    {26}let pinUVAuthToken: key = pinAuth in
+    {31}let pinAuth_1: bitstring = HMAC(pinUVAuthToken,hash(cdata_1)) in
+    {33}out(A_C, (hash(cdata_1),credID_3,pinAuth_1));
+    {34}in(A_C, (aData_1: bitstring,sig_1: bitstring));
+    {35}out(C_LB, (aData_1,sig_1,cdata_1));
+    {36}in(C_LB, access_token: bitstring)
+) | (
+    {37}!
+    {41}in(A_C, (hcdata: bitstring,credID_4: bitstring,pinAuth_2: bitstring));
+    {48}get auth_record(x: bitstring) suchthat (x = credID_4) in
+    {40}let pinAuthToken: key = pinAuth in
+    {42}if (pinAuth_2 = HMAC(pinAuthToken,hcdata)) then
+    {39}let wk_1: key = wk in
+    {43}let Auth1(username_3: Username,rpid_3: RpId,skA_1: sskey) = sdec(credID_4,wk_1) in
+    {38}let aaguid_3: AAGUID = aaguid in
+    {46}event Authnr_Finish_Auth(username_3,aaguid_3,credID_4,spk(skA_1));
+    {44}let aData_2: bitstring = Auth2(h(rpid_3),aaguid_3,credID_4,spk(skA_1)) in
+    {45}let sig_2: bitstring = sign(Auth3(aData_2,hcdata),skA_1) in
+    {47}out(A_C, (aData_2,sig_2))
+) | (
+    {49}!
+    {50}in(C_LB, username_4: Username);
+    {51}out(reveal, sanity1);
+    {52}out(LB_RP, username_4);
+    {53}in(LB_RP, (rpid_4: RpId,challenge_2: Nonce,credID_5: bitstring));
+    {54}out(reveal, (rpid_4,challenge_2,credID_5));
+    {55}out(C_LB, (rpid_4,challenge_2,credID_5));
+    {56}in(C_LB, (aData_3: bitstring,sig_3: bitstring,cdata_2: bitstring));
+    {57}out(reveal, (aData_3,sig_3,cdata_2));
+    {58}out(LB_RP, (aData_3,sig_3,cdata_2));
+    {59}in(LB_RP, token: bitstring);
+    {60}out(reveal, token);
+    {61}out(C_LB, token)
+)
+
+-- Query not attacker(sanity1[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect username_5:Username; mess(C_LB[],username_5).
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect credID_6:bitstring, challenge_3:Nonce, rpid_5:RpId; mess(C_LB[],(rpid_5,challenge_3,credID_6)).
+Starting query not attacker(sanity1[])
+goal reachable: attacker(sanity1[])
+
+Derivation:
+
+1. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+2. The message username[] that may be sent on channel C_LB[] by 1 may be received at input {50}.
+So the message sanity1[] may be sent to the attacker at output {51}.
+attacker(sanity1[]).
+
+3. By 2, attacker(sanity1[]).
+The goal is reached, represented in the following fact:
+attacker(sanity1[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new rpid: RpId creating rpid_5 at {1}
+
+new clientid: ClientId creating clientid_1 at {2}
+
+new pinAuth: key creating pinAuth_3 at {3}
+
+new wk: key creating wk_2 at {4}
+
+new aaguid: AAGUID creating aaguid_4 at {5}
+
+new username: Username creating username_5 at {6}
+
+new skA: sskey creating skA_2 at {7}
+
+insert rp_record(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {9}
+
+insert auth_record(senc(Auth1(username_5,rpid_5,skA_2),wk_2)) at {10}
+
+out(C_LB, username_5) at {28} in copy a received at {50} in copy a_1
+
+out(reveal, ~M) with ~M = sanity1 at {51} in copy a_1
+
+The attacker has the message ~M = sanity1.
+A trace has been found.
+RESULT not attacker(sanity1[]) is false.
+-- Query not attacker(sanity2[]) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect username_5:Username; mess(C_LB[],username_5).
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect credID_6:bitstring, challenge_3:Nonce, rpid_5:RpId; mess(C_LB[],(rpid_5,challenge_3,credID_6)).
+Starting query not attacker(sanity2[])
+RESULT not attacker(sanity2[]) is true.
+-- Query not event(Authnr_Finish_Auth(u,a,c,pkau)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect username_5:Username; mess(C_LB[],username_5).
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect credID_6:bitstring, challenge_3:Nonce, rpid_5:RpId; mess(C_LB[],(rpid_5,challenge_3,credID_6)).
+Starting query not event(Authnr_Finish_Auth(u,a,c,pkau))
+goal reachable: event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])))
+
+Derivation:
+Abbreviations:
+challenge_3 = challenge[pkA = spk(skA[]),credID_1 = senc(Auth1(username[],rpid[],skA[]),wk[]),aaguid_1 = aaguid[],username_1 = username[],!1 = @sid]
+
+1. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+2. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+3. The message username[] that may be sent on channel C_LB[] by 2 may be received at input {50}.
+So the message username[] may be sent on channel LB_RP[] at output {52}.
+mess(LB_RP[],username[]).
+
+4. The entry rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) may be inserted in a table at insert {9}.
+table(rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+
+5. The message username[] that may be sent on channel LB_RP[] by 3 may be received at input {13}.
+The entry rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) that may be in a table by 4 may be read at get {23}.
+So the message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) may be sent on channel LB_RP[] at output {15}.
+mess(LB_RP[],(rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+6. The message username[] that may be sent on channel C_LB[] by 1 may be received at input {50}.
+The message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) that may be sent on channel LB_RP[] by 5 may be received at input {53}.
+So the message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) may be sent on channel C_LB[] at output {55}.
+mess(C_LB[],(rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+7. The message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) that may be sent on channel C_LB[] by 6 may be received at input {29}.
+So the message (hash(Client1(rpid[],challenge_3)),senc(Auth1(username[],rpid[],skA[]),wk[]),HMAC(pinAuth[],hash(Client1(rpid[],challenge_3)))) may be sent on channel A_C[] at output {33}.
+mess(A_C[],(hash(Client1(rpid[],challenge_3)),senc(Auth1(username[],rpid[],skA[]),wk[]),HMAC(pinAuth[],hash(Client1(rpid[],challenge_3))))).
+
+8. The entry auth_record(senc(Auth1(username[],rpid[],skA[]),wk[])) may be inserted in a table at insert {10}.
+table(auth_record(senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+9. The message (hash(Client1(rpid[],challenge_3)),senc(Auth1(username[],rpid[],skA[]),wk[]),HMAC(pinAuth[],hash(Client1(rpid[],challenge_3)))) that may be sent on channel A_C[] by 7 may be received at input {41}.
+The entry auth_record(senc(Auth1(username[],rpid[],skA[]),wk[])) that may be in a table by 8 may be read at get {48}.
+So event Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) may be executed at {46}.
+event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+
+10. By 9, event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+The goal is reached, represented in the following fact:
+event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new rpid: RpId creating rpid_5 at {1}
+
+new clientid: ClientId creating clientid_1 at {2}
+
+new pinAuth: key creating pinAuth_3 at {3}
+
+new wk: key creating wk_2 at {4}
+
+new aaguid: AAGUID creating aaguid_4 at {5}
+
+new username: Username creating username_5 at {6}
+
+new skA: sskey creating skA_2 at {7}
+
+insert rp_record(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {9}
+
+insert auth_record(senc(Auth1(username_5,rpid_5,skA_2),wk_2)) at {10}
+
+out(C_LB, username_5) at {28} in copy a received at {50} in copy a_1
+
+out(reveal, ~M) with ~M = sanity1 at {51} in copy a_1
+
+out(LB_RP, username_5) at {52} in copy a_1 received at {13} in copy a_2
+
+get rp_record(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {23} in copy a_2
+
+new challenge: Nonce creating challenge_4 at {14} in copy a_2
+
+out(C_LB, username_5) at {28} in copy a_3 received at {29} in copy a (input fails)
+
+out(C_LB, username_5) at {28} in copy a_4 received at {29} in copy a_3 (input fails)
+
+out(LB_RP, (rpid_5,challenge_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2))) at {15} in copy a_2 received at {53} in copy a_1
+
+out(reveal, (~M_1,~M_2,~M_3)) with ~M_1 = rpid_5, ~M_2 = challenge_4, ~M_3 = senc(Auth1(username_5,rpid_5,skA_2),wk_2) at {54} in copy a_1
+
+out(C_LB, (rpid_5,challenge_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2))) at {55} in copy a_1 received at {29} in copy a_4
+
+event Client_Init_Auth(username_5,rpid_5) at {32} in copy a_4
+
+out(A_C, (hash(Client1(rpid_5,challenge_4)),senc(Auth1(username_5,rpid_5,skA_2),wk_2),HMAC(pinAuth_3,hash(Client1(rpid_5,challenge_4))))) at {33} in copy a_4 received at {41} in copy a_5
+
+get auth_record(senc(Auth1(username_5,rpid_5,skA_2),wk_2)) at {48} in copy a_5
+
+event Authnr_Finish_Auth(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {46} in copy a_5 (goal)
+
+The event Authnr_Finish_Auth(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) is executed at {46} in copy a_5.
+A trace has been found.
+RESULT not event(Authnr_Finish_Auth(u,a,c,pkau)) is false.
+-- Query not event(Server_Finish_Auth(u,r,a,c,pkau)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect username_5:Username; mess(C_LB[],username_5).
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect credID_6:bitstring, challenge_3:Nonce, rpid_5:RpId; mess(C_LB[],(rpid_5,challenge_3,credID_6)).
+Starting query not event(Server_Finish_Auth(u,r,a,c,pkau))
+goal reachable: event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])))
+
+Derivation:
+Abbreviations:
+challenge_3 = challenge[pkA = spk(skA[]),credID_1 = senc(Auth1(username[],rpid[],skA[]),wk[]),aaguid_1 = aaguid[],username_1 = username[],!1 = @sid]
+
+1. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+2. The message username[] that may be sent on channel C_LB[] by 1 may be received at input {50}.
+So the message username[] may be sent on channel LB_RP[] at output {52}.
+mess(LB_RP[],username[]).
+
+3. The entry rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) may be inserted in a table at insert {9}.
+table(rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+
+4. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+5. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+6. The message username[] that may be sent on channel C_LB[] by 5 may be received at input {50}.
+So the message username[] may be sent on channel LB_RP[] at output {52}.
+mess(LB_RP[],username[]).
+
+7. The message username[] that may be sent on channel LB_RP[] by 6 may be received at input {13}.
+The entry rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) that may be in a table by 3 may be read at get {23}.
+So the message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) may be sent on channel LB_RP[] at output {15}.
+mess(LB_RP[],(rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+8. The message username[] that may be sent on channel C_LB[] by 4 may be received at input {50}.
+The message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) that may be sent on channel LB_RP[] by 7 may be received at input {53}.
+So the message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) may be sent on channel C_LB[] at output {55}.
+mess(C_LB[],(rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+9. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+10. The message username[] may be sent on channel C_LB[] at output {28}.
+mess(C_LB[],username[]).
+
+11. The message username[] that may be sent on channel C_LB[] by 10 may be received at input {50}.
+So the message username[] may be sent on channel LB_RP[] at output {52}.
+mess(LB_RP[],username[]).
+
+12. The message username[] that may be sent on channel LB_RP[] by 11 may be received at input {13}.
+The entry rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) that may be in a table by 3 may be read at get {23}.
+So the message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) may be sent on channel LB_RP[] at output {15}.
+mess(LB_RP[],(rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+13. The message username[] that may be sent on channel C_LB[] by 9 may be received at input {50}.
+The message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) that may be sent on channel LB_RP[] by 12 may be received at input {53}.
+So the message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) may be sent on channel C_LB[] at output {55}.
+mess(C_LB[],(rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+14. The message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) that may be sent on channel C_LB[] by 13 may be received at input {29}.
+So the message (hash(Client1(rpid[],challenge_3)),senc(Auth1(username[],rpid[],skA[]),wk[]),HMAC(pinAuth[],hash(Client1(rpid[],challenge_3)))) may be sent on channel A_C[] at output {33}.
+mess(A_C[],(hash(Client1(rpid[],challenge_3)),senc(Auth1(username[],rpid[],skA[]),wk[]),HMAC(pinAuth[],hash(Client1(rpid[],challenge_3))))).
+
+15. The entry auth_record(senc(Auth1(username[],rpid[],skA[]),wk[])) may be inserted in a table at insert {10}.
+table(auth_record(senc(Auth1(username[],rpid[],skA[]),wk[]))).
+
+16. The message (hash(Client1(rpid[],challenge_3)),senc(Auth1(username[],rpid[],skA[]),wk[]),HMAC(pinAuth[],hash(Client1(rpid[],challenge_3)))) that may be sent on channel A_C[] by 14 may be received at input {41}.
+The entry auth_record(senc(Auth1(username[],rpid[],skA[]),wk[])) that may be in a table by 15 may be read at get {48}.
+So the message (Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[])) may be sent on channel A_C[] at output {47}.
+mess(A_C[],(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[]))).
+
+17. The message (rpid[],challenge_3,senc(Auth1(username[],rpid[],skA[]),wk[])) that may be sent on channel C_LB[] by 8 may be received at input {29}.
+The message (Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[])) that may be sent on channel A_C[] by 16 may be received at input {34}.
+So the message (Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[]),Client1(rpid[],challenge_3)) may be sent on channel C_LB[] at output {35}.
+mess(C_LB[],(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[]),Client1(rpid[],challenge_3))).
+
+18. The message (Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[]),Client1(rpid[],challenge_3)) that may be sent on channel C_LB[] by 17 may be received at input {50}.
+So the message (Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[]),Client1(rpid[],challenge_3)) may be sent on channel LB_RP[] at output {52}.
+mess(LB_RP[],(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[]),Client1(rpid[],challenge_3))).
+
+19. The message username[] that may be sent on channel LB_RP[] by 2 may be received at input {13}.
+The entry rp_record(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) that may be in a table by 3 may be read at get {23}.
+The message (Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),sign(Auth3(Auth2(h(rpid[]),aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])),hash(Client1(rpid[],challenge_3))),skA[]),Client1(rpid[],challenge_3)) that may be sent on channel LB_RP[] by 18 may be received at input {16}.
+So event Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])) may be executed at {21}.
+event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+
+20. By 19, event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+The goal is reached, represented in the following fact:
+event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new rpid: RpId creating rpid_5 at {1}
+
+new clientid: ClientId creating clientid_1 at {2}
+
+new pinAuth: key creating pinAuth_3 at {3}
+
+new wk: key creating wk_2 at {4}
+
+new aaguid: AAGUID creating aaguid_4 at {5}
+
+new username: Username creating username_5 at {6}
+
+new skA: sskey creating skA_2 at {7}
+
+insert rp_record(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {9}
+
+insert auth_record(senc(Auth1(username_5,rpid_5,skA_2),wk_2)) at {10}
+
+out(C_LB, username_5) at {28} in copy a received at {50} in copy a_1
+
+out(reveal, ~M) with ~M = sanity1 at {51} in copy a_1
+
+out(LB_RP, username_5) at {52} in copy a_1 received at {13} in copy a_2
+
+get rp_record(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {23} in copy a_2
+
+new challenge: Nonce creating challenge_4 at {14} in copy a_2
+
+out(C_LB, username_5) at {28} in copy a_3 received at {29} in copy a (input fails)
+
+out(C_LB, username_5) at {28} in copy a_4 received at {29} in copy a_3 (input fails)
+
+out(C_LB, username_5) at {28} in copy a_5 received at {29} in copy a_4 (input fails)
+
+out(C_LB, username_5) at {28} in copy a_6 received at {29} in copy a_5 (input fails)
+
+out(C_LB, username_5) at {28} in copy a_7 received at {29} in copy a_6 (input fails)
+
+out(LB_RP, (rpid_5,challenge_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2))) at {15} in copy a_2 received at {53} in copy a_1
+
+out(reveal, (~M_1,~M_2,~M_3)) with ~M_1 = rpid_5, ~M_2 = challenge_4, ~M_3 = senc(Auth1(username_5,rpid_5,skA_2),wk_2) at {54} in copy a_1
+
+out(C_LB, (rpid_5,challenge_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2))) at {55} in copy a_1 received at {29} in copy a_7
+
+event Client_Init_Auth(username_5,rpid_5) at {32} in copy a_7
+
+out(A_C, (hash(Client1(rpid_5,challenge_4)),senc(Auth1(username_5,rpid_5,skA_2),wk_2),HMAC(pinAuth_3,hash(Client1(rpid_5,challenge_4))))) at {33} in copy a_7 received at {41} in copy a_8
+
+get auth_record(senc(Auth1(username_5,rpid_5,skA_2),wk_2)) at {48} in copy a_8
+
+event Authnr_Finish_Auth(username_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {46} in copy a_8
+
+out(A_C, (Auth2(h(rpid_5),aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)),sign(Auth3(Auth2(h(rpid_5),aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)),hash(Client1(rpid_5,challenge_4))),skA_2))) at {47} in copy a_8 received at {34} in copy a_7
+
+out(C_LB, (Auth2(h(rpid_5),aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)),sign(Auth3(Auth2(h(rpid_5),aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)),hash(Client1(rpid_5,challenge_4))),skA_2),Client1(rpid_5,challenge_4))) at {35} in copy a_7 received at {56} in copy a_1
+
+out(reveal, (Auth2(~M_4,~M_5,~M_6,~M_7),~M_8,Client1(~M_9,~M_10))) with ~M_4 = h(rpid_5), ~M_5 = aaguid_4, ~M_6 = senc(Auth1(username_5,rpid_5,skA_2),wk_2), ~M_7 = spk(skA_2), ~M_8 = sign(Auth3(Auth2(h(rpid_5),aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)),hash(Client1(rpid_5,challenge_4))),skA_2), ~M_9 = rpid_5, ~M_10 = challenge_4 at {57} in copy a_1
+
+out(LB_RP, (Auth2(h(rpid_5),aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)),sign(Auth3(Auth2(h(rpid_5),aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)),hash(Client1(rpid_5,challenge_4))),skA_2),Client1(rpid_5,challenge_4))) at {58} in copy a_1 received at {16} in copy a_2
+
+event Server_Finish_Auth(username_5,rpid_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) at {21} in copy a_2 (goal)
+
+The event Server_Finish_Auth(username_5,rpid_5,aaguid_4,senc(Auth1(username_5,rpid_5,skA_2),wk_2),spk(skA_2)) is executed at {21} in copy a_2.
+A trace has been found.
+RESULT not event(Server_Finish_Auth(u,r,a,c,pkau)) is false.
+-- Query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Client_Init_Auth(u,r)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect username_5:Username; mess(C_LB[],username_5).
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect credID_6:bitstring, challenge_3:Nonce, rpid_5:RpId; mess(C_LB[],(rpid_5,challenge_3,credID_6)).
+Starting query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Client_Init_Auth(u,r))
+goal reachable: b-event(Client_Init_Auth(username[],rpid[])) -> event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])))
+RESULT event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Client_Init_Auth(u,r)) is true.
+-- Query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Authnr_Finish_Auth(u,a,c,pkau)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect username_5:Username; mess(C_LB[],username_5).
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect credID_6:bitstring, challenge_3:Nonce, rpid_5:RpId; mess(C_LB[],(rpid_5,challenge_3,credID_6)).
+Starting query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Authnr_Finish_Auth(u,a,c,pkau))
+goal reachable: b-event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))) -> event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])))
+RESULT event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Authnr_Finish_Auth(u,a,c,pkau)) is true.
+-- Query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> (event(Authnr_Finish_Auth(u,a,c,pkau)) ==> event(Client_Init_Auth(u,r))) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect username_5:Username; mess(C_LB[],username_5).
+Termination warning: Selecting an hypothesis matching the conclusion.
+In case of non-termination, try a noselect declaration implying the following one:
+   noselect credID_6:bitstring, challenge_3:Nonce, rpid_5:RpId; mess(C_LB[],(rpid_5,challenge_3,credID_6)).
+Starting query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> (event(Authnr_Finish_Auth(u,a,c,pkau)) ==> event(Client_Init_Auth(u,r)))
+goal reachable: b-event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))) && b-event(Client_Init_Auth(username[],rpid[])) -> event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])))
+The 1st, 2nd hypotheses occur strictly before the conclusion.
+goal reachable: b-event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))) && b-event(Client_Init_Auth(username[],rpid[])) -> event(Server_Finish_Auth(username[],rpid[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[]))) && event(Authnr_Finish_Auth(username[],aaguid[],senc(Auth1(username[],rpid[],skA[]),wk[]),spk(skA[])))
+The 1st, 2nd hypotheses occur strictly before the 1st conclusion.
+The 2nd hypothesis occurs strictly before the 2nd conclusion.
+RESULT event(Server_Finish_Auth(u,r,a,c,pkau)) ==> (event(Authnr_Finish_Auth(u,a,c,pkau)) ==> event(Client_Init_Auth(u,r))) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(sanity1[]) is false.
+
+Query not attacker(sanity2[]) is true.
+
+Query not event(Authnr_Finish_Auth(u,a,c,pkau)) is false.
+
+Query not event(Server_Finish_Auth(u,r,a,c,pkau)) is false.
+
+Query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Client_Init_Auth(u,r)) is true.
+
+Query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Authnr_Finish_Auth(u,a,c,pkau)) is true.
+
+Query event(Server_Finish_Auth(u,r,a,c,pkau)) ==> (event(Authnr_Finish_Auth(u,a,c,pkau)) ==> event(Client_Init_Auth(u,r))) is true.
+
+--------------------------------------------------------------
+

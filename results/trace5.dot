@@ -1,0 +1,105 @@
+digraph {
+graph [ordering = out]
+edge [arrowhead = none, penwidth = 1.6, fontsize = 30]
+node [shape = point, width = 0, height = 0, fontsize = 30]
+Trace<br/>
+[label = <A trace has been found.<br/>
+>, shape = plaintext]
+P0__0 [label = "Honest Process", shape = plaintext]
+P__0 [label = "Attacker", shape = plaintext]
+Trace -> P0__0 [label = "", style = invisible, weight = 100]{rank = same; P0__0 P__0}
+P0__0 -> P0__1 [label = <>, weight = 100]
+P0__1 -> P0__2 [label = <>, weight = 100]
+P0__2 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{1}</FONT><FONT COLOR="blue">new </FONT>rpid_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{2}</FONT><FONT COLOR="blue">new </FONT>clientid_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{3}</FONT><FONT COLOR="blue">new </FONT>pinAuth_3</TD></TR><TR><TD><FONT COLOR="darkgreen">{4}</FONT><FONT COLOR="blue">new </FONT>wk_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{5}</FONT><FONT COLOR="blue">new </FONT>aaguid_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{6}</FONT><FONT COLOR="blue">new </FONT>username_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{7}</FONT><FONT COLOR="blue">new </FONT>skA_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{9}</FONT><FONT COLOR="blue">insert </FONT>rp_record(username_4,aaguid_4,senc(Auth1(<br/>
+username_4,rpid_4,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{10}</FONT><FONT COLOR="blue">insert </FONT>auth_record(senc(Auth1(username_4,rpid_4,<br/>
+skA_2),wk_2))</TD></TR></TABLE>>]
+P0__2 -> P0__3 [label = <>, weight = 100]
+P__0 -> P__1 [label = <>, weight = 100]
+{rank = same; P__1 P0__2}
+/*RPar */
+P0__3 -> P0_2__3 [label = <>]
+P0__3 -> P0_1__3 [label = <>]
+P0__3 -> P0_0__3 [label = <>]
+P0__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
+{rank = same; P0_0__3 P0_1__3 P0_2__3}
+P0_0__3 -> P0_0__4 [label = <>, weight = 100]
+P0_0__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Auth_Auth</FONT></TD></TR></TABLE>>]
+P0_0__4 -> P0_0__5 [label = <>, weight = 100]
+P0_1__3 -> P0_1__4 [label = <>, weight = 100]
+P0_1__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Client_Auth</FONT></TD></TR></TABLE>>]
+P0_1__4 -> P0_1__5 [label = <>, weight = 100]
+P0_1__5 -> P0_1__6 [label = <>, weight = 100]
+P0_0__5 -> P0_0__6 [label = <>, weight = 100]
+P__1 -> P__2 [label = <>, weight = 100]
+{rank = same; P__2 P0_0__6 P0_1__6}
+P0_1__6 -> P0_1__7 [label = <>, weight = 100]
+P__2 -> P__3 [label = <>, weight = 100]
+{rank = same; P__3 P0_1__7}
+P0_1__7 -> P__3 [label = <~M = username_4>, arrowhead = normal]
+P0_1__7 -> P0_1__8 [label = <>, weight = 100]
+P0_0__6 -> P0_0__7 [label = <>, weight = 100]
+P__3 -> P__4 [label = <>, weight = 100]
+{rank = same; P__4 P0_0__7 P0_1__8}
+P0_2__3 -> P0_2__4 [label = <>, weight = 100]
+P0_2__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">RP_Auth</FONT></TD></TR></TABLE>>]
+P0_2__4 -> P0_2__5 [label = <>, weight = 100]
+P0_2__5 -> P0_2__6 [label = <>, weight = 100]
+P0_1__8 -> P0_1__9 [label = <>, weight = 100]
+P0_0__7 -> P0_0__8 [label = <>, weight = 100]
+P__4 -> P__5 [label = <>, weight = 100]
+{rank = same; P__5 P0_0__8 P0_1__9 P0_2__6}
+P0_2__6 -> P0_2__7 [label = <>, weight = 100]
+P__5 -> P__6 [label = <>, weight = 100]
+{rank = same; P__6 P0_2__7}
+P0_2__7 -> P__6 [label = <~M = username_4>, dir = back, arrowhead = normal]
+P0_2__7 -> P0_2__8 [label = <>, weight = 100]
+P0_1__9 -> P0_1__10 [label = <>, weight = 100]
+P0_0__8 -> P0_0__9 [label = <>, weight = 100]
+P__6 -> P__7 [label = <>, weight = 100]
+{rank = same; P__7 P0_0__9 P0_1__10 P0_2__8}
+P0_2__8 -> P0_2__9 [label = <>, weight = 100]
+P0_2__9 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{22}</FONT><FONT COLOR="blue">get </FONT>rp_record(username_4,aaguid_4,senc(Auth1(<br/>
+username_4,rpid_4,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{13}</FONT><FONT COLOR="blue">new </FONT>challenge_3</TD></TR></TABLE>>]
+P0_2__9 -> P0_2__10 [label = <>, weight = 100]
+P__7 -> P__8 [label = <>, weight = 100]
+{rank = same; P__8 P0_2__9}
+P0_2__10 -> P0_2__11 [label = <>, weight = 100]
+P0_1__10 -> P0_1__11 [label = <>, weight = 100]
+P0_0__9 -> P0_0__10 [label = <>, weight = 100]
+P__8 -> P__9 [label = <>, weight = 100]
+{rank = same; P__9 P0_0__10 P0_1__11 P0_2__11}
+P0_2__11 -> P0_2__12 [label = <>, weight = 100]
+P__9 -> P__10 [label = <>, weight = 100]
+{rank = same; P__10 P0_2__12}
+P0_2__12 -> P__10 [label = <(~M_1,~M_2,~M_3) = (rpid_4,challenge_3,senc(Auth1(<br/>
+username_4,rpid_4,skA_2),wk_2))>, arrowhead = normal]
+P0_2__12 -> P0_2__13 [label = <>, weight = 100]
+P0_1__11 -> P0_1__12 [label = <>, weight = 100]
+P0_0__10 -> P0_0__11 [label = <>, weight = 100]
+P__10 -> P__11 [label = <>, weight = 100]
+{rank = same; P__11 P0_0__11 P0_1__12 P0_2__13}
+P0_2__13 -> P0_2__14 [label = <>, weight = 100]
+P0_1__12 -> P0_1__13 [label = <>, weight = 100]
+P0_0__11 -> P0_0__12 [label = <>, weight = 100]
+P__11 -> P__12 [label = <>, weight = 100]
+{rank = same; P__12 P0_0__12 P0_1__13 P0_2__14}
+P0_2__14 -> P0_2__15 [label = <>, weight = 100]
+P__12 -> P__13 [label = <>, weight = 100]
+{rank = same; P__13 P0_2__15}
+P0_2__15 -> P__13 [label = <~X_1>, dir = back, arrowhead = normal]
+P0_2__15 -> P0_2__16 [label = <>, weight = 100]
+P0_1__13 -> P0_1__14 [label = <>, weight = 100]
+P0_0__12 -> P0_0__13 [label = <>, weight = 100]
+P__13 -> P__14 [label = <>, weight = 100]
+{rank = same; P__14 P0_0__13 P0_1__14 P0_2__16}
+P0_2__16 -> P0_2__17 [label = <>, weight = 100]
+P0_2__17 [color = red, shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{20}</FONT><FONT COLOR="blue">event</FONT> Server_Finish_Auth(username_4,rpid_4,<br/>
+a_1,a_2,spk(a_3))</TD></TR></TABLE>>]
+P0_2__17 -> P0_2__18 [label = <>, weight = 100]
+Abbrev [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR> <TD> Abbreviations </TD></TR><TR><TD>~X_1 = (Auth2(h(~M_1),a_1,a_2,spk(a_3)),sign(Auth3(Auth2(<br/>
+h(~M_1),a_1,a_2,spk(a_3)),hash(Client1(~M_1,~M_2))),<br/>
+a_3),Client1(~M_1,~M_2))<br/>
+= (Auth2(h(rpid_4),a_1,<br/>
+a_2,spk(a_3)),sign(Auth3(Auth2(h(rpid_4),a_1,a_2,<br/>
+spk(a_3)),hash(Client1(rpid_4,challenge_3))),a_3),<br/>
+Client1(rpid_4,challenge_3))</TD></TR></TABLE>>]Abbrev -> P__0 [style = invisible, weight =100]}

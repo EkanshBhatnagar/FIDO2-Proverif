@@ -1,0 +1,136 @@
+type Username.
+type Nonce.
+type RpId.
+type ClientId.
+type Packet.
+type key.
+type skey.
+type pkey.
+type sskey.
+type spkey.
+type AAGUID.
+
+free reveal: channel.
+(* With TLS *)
+free C_LB: channel [private].
+free LB_RP: channel [private].
+free A_C: channel [private].
+
+fun UsernameToPacket(Username):Packet [typeConverter].
+fun Client1(RpId, Nonce): bitstring [data].
+fun Auth1(Username, RpId, sskey):bitstring [data].
+fun Auth2(bitstring, AAGUID, bitstring, spkey): bitstring [data].
+fun Auth3(bitstring,bitstring): bitstring [data].
+
+fun pk(skey): pkey.
+fun aenc(bitstring, pkey): bitstring.
+reduc forall m: bitstring, sk: skey; adec(aenc(m,pk(sk)),sk) = m.
+
+fun spk(sskey):spkey.
+fun sign(bitstring,sskey): bitstring.
+const OK:bitstring.
+fun checksign(bitstring,bitstring,spkey):bitstring
+reduc forall m: bitstring, ssk: sskey; checksign(sign(m,ssk),m,spk(ssk)) = OK.
+
+fun senc(bitstring,key):bitstring.
+fun sdec(bitstring,key):bitstring
+reduc forall m:bitstring, k:key; sdec(senc(m,k),k) = m.
+
+const bear_token:bitstring [private].
+fun HMAC(key,bitstring):bitstring.
+fun hash(bitstring):bitstring.
+fun h(RpId): bitstring.
+
+table rp_record(Username, AAGUID, bitstring, spkey).
+table auth_record(bitstring).
+event Client_Init_Auth(Username, RpId).
+event Authnr_Finish_Auth(Username,AAGUID,bitstring,spkey).
+event Server_Finish_Auth(Username,RpId,AAGUID,bitstring,spkey).
+
+free sanity1:bitstring [private].
+free sanity2:bitstring [private].
+free sanity3:bitstring [private].
+
+query attacker(sanity1).
+query attacker(sanity2).
+
+query attacker(bear_token).
+query u:Username, a:AAGUID, c:bitstring, pkau:spkey; event(Authnr_Finish_Auth(u,a,c,pkau)).
+
+query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; event(Server_Finish_Auth(u,r,a,c,pkau)).
+
+query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; 
+inj-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> inj-event(Client_Init_Auth(u,r)).
+
+query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; 
+inj-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> inj-event(Authnr_Finish_Auth(u,a,c,pkau)).
+
+query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; 
+inj-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> (inj-event(Authnr_Finish_Auth(u,a,c,pkau)) ==> inj-event(Client_Init_Auth(u,r))).
+
+let RP_Auth(rpid:RpId) =
+    in(LB_RP, username:Username);
+    get rp_record(=username, aaguid, credID, pkA) in
+    new challenge:Nonce;
+    out(LB_RP, (rpid, challenge, credID));
+    in(LB_RP, (aData:bitstring, sig:bitstring, cdata:bitstring));
+    if Client1(rpid, challenge) = cdata then
+    let Auth2(h_rpid, aaguid, credID, pkA) = aData in
+    if h_rpid = h(rpid) then
+    if checksign(sig, Auth3(aData,hash(cdata)), pkA) = OK then
+    event Server_Finish_Auth(username,rpid,aaguid,credID,pkA);
+    out(LB_RP, bear_token)
+.
+
+let Client_Auth(client_id:ClientId, pinUVAuthToken:key, username:Username) =
+
+    out(C_LB, username);
+    in(C_LB, (rpid:RpId, challenge:Nonce, credID:bitstring));
+    let cdata = Client1(rpid, challenge) in
+    let pinAuth = (HMAC(pinUVAuthToken,hash(cdata))) in
+    event Client_Init_Auth(username, rpid);
+    out(A_C, (hash(cdata), credID, pinAuth));
+    in(A_C, (aData:bitstring, sig:bitstring));
+    out(C_LB, (aData, sig, cdata));
+    in(C_LB, access_token:bitstring)
+.
+
+let Auth_Auth(aaguid:AAGUID, wk:key, pinAuthToken:key) = 
+    in(A_C, (hcdata:bitstring, credID:bitstring, pinAuth:bitstring));
+    get auth_record(x) suchthat x = credID in
+    if pinAuth = HMAC(pinAuthToken, hcdata) then
+    let Auth1(username, rpid, skA) = sdec(credID, wk) in
+    let aData = Auth2(h(rpid), aaguid, credID, spk(skA)) in
+    let sig = sign(Auth3(aData,hcdata),skA) in
+    event Authnr_Finish_Auth(username,aaguid,credID,spk(skA));
+    out(A_C, (aData, sig))
+.   
+
+let LoadBalancer() =
+    in(C_LB, username:Username);
+    out(reveal, sanity1);
+    out(LB_RP, username);
+    in(LB_RP, (rpid:RpId, challenge:Nonce, credID:bitstring));
+    out(reveal, (rpid, challenge, credID));
+    out(C_LB, (rpid, challenge, credID));
+    in(C_LB, (aData:bitstring, sig:bitstring, cdata:bitstring));
+    out(reveal, (aData, sig, cdata));
+    out(LB_RP, (aData, sig, cdata));
+    in(LB_RP, token:bitstring);
+    out(reveal, sanity2);
+    out(C_LB, token)
+    
+.
+
+process
+    new rpid:RpId;
+    new clientid:ClientId;
+    new pinAuth:key;
+    new wk:key;
+    new aaguid:AAGUID;
+    new username:Username;
+    new skA:sskey;
+    let credID = senc(Auth1(username, rpid, skA), wk) in
+    insert rp_record(username, aaguid, credID, spk(skA));
+    insert auth_record(credID);
+    !RP_Auth(rpid) | !Client_Auth(clientid, pinAuth, username) | !Auth_Auth(aaguid, wk, pinAuth) | !(LoadBalancer())
