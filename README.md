@@ -65,6 +65,7 @@ proverif -graph <results_folder> <model_file.pv>
 | `fido2_secure_auth.pv`              | Basic FIDO2 authentication with secure channels         |
 | `fido2_secure_reg.pv`               | Basic FIDO2 registration with secure channels           |
 | `fido2_load_balancer_auth.pv`       | FIDO2 authentication with an added load balancer        |
+| `fido2_jasson_auth.pv`              | Modified Procotol to fix vulnerabilities                |
 
 > **Note:** Other model files in this repository may be temporary or experimental. This list will be updated to highlight stable and working models.
 
