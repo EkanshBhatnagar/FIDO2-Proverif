@@ -1,26 +1,22 @@
-(* FIDO2 WebAuthn authentication protocol with an infected Load Balancer:
-
-   The protocol involves four agents:
-   1. Client (typically a browser) - initiates authentication 
+(* This model implements the FIDO2 WebAuthn authentication protocol with secure direct communication.
+   The protocol involves three entities:
+   1. Client (user agent, typically a browser) - initiates authentication 
    2. Authenticator - hardware/software security key that handles cryptographic operations
    3. Relying Party (RP) - the web server that wants to authenticate the user
-   4. Load Balancer (LB) - sits between Client and RP, forwards messages but is compromised
 
    Communication channels:
-   - C_LB: Client to Load Balancer (private but compromised via 'reveal')
-   - LB_RP: Load Balancer to Relying Party (private but compromised via 'reveal')
+   - C_RP: Client to Relying Party (private and secure)
    - A_C: Authenticator to Client (private and secure)
-   - reveal: Channel used by Load Balancer to leak information to the attacker
+   - reveal: Channel (not used in this secure model)
 
    The protocol flow follows WebAuthn specifications:
-   1. Client sends username to RP via LB
-   2. RP sends challenge to Client via LB
+   1. Client sends username to RP directly
+   2. RP sends challenge to Client directly
    3. Client forwards challenge to Authenticator
    4. Authenticator creates signed assertion
-   5. Client forwards assertion to RP via LB
+   5. Client forwards assertion to RP directly
    6. RP verifies assertion and issues bearer token
 
-   Security properties test whether authentication remains secure despite the compromised LB.
 *)
 
 (* Type declarations for the entities and data involved in the protocol *)
@@ -35,22 +31,25 @@ type pkey.          (* Public key for asymmetric encryption *)
 type sskey.         (* Signing secret key *)
 type spkey.         (* Signing public key *)
 type AAGUID.        (* Authenticator Attestation GUID - identifies the authenticator model *)
+type exponent.
+type group.
+
+const g: group.
 
 (* Channel declarations *)
-free reveal: channel.           (* Channel for the compromised load balancer to leak information *)
-
-(* Private channels for secure communication - Modelling TLS between client, load balancer and relying party. *)
-free C_LB: channel [private].   (* Client to Load Balancer *)
-free LB_RP: channel [private].  (* Load Balancer to Relying Party *)
-free A_C: channel [private].    (* Authenticator to Client *)
+free reveal: channel.         (* Channel for revealing data - not used in this secure model *)
+(* Private channels for secure communication - Modelling TLS *)
+free C_RP: channel . (* Client to Relying Party - direct secure channel *)
+free A_C: channel [private].  (* Authenticator to Client *)
 
 (* Function declarations for data conversions and protocol messages *)
 fun UsernameToPacket(Username):Packet [typeConverter].
-
 fun Client1(RpId, Nonce): bitstring [data].        (* Client's challenge response *)
 fun Auth1(Username, RpId, sskey):bitstring [data]. (* Authenticator credential data *)
 fun Auth2(bitstring, AAGUID, bitstring, spkey): bitstring [data]. (* Authenticator data *)
 fun Auth3(bitstring,bitstring): bitstring [data].  (* Data to be signed *)
+fun Auth4(bitstring, bitstring, bitstring, bitstring, group): bitstring [data].
+fun RP1(Nonce, RpId, bitstring, group) : bitstring [data].
 
 (* Asymmetric encryption functions *)
 fun pk(skey): pkey.                           (* Public key derivation from secret key *)
@@ -79,6 +78,16 @@ fun h(RpId): bitstring.                       (* Special hash for RP ID *)
 table rp_record(Username, AAGUID, bitstring, spkey). (* RP stores user credentials *)
 table auth_record(bitstring).                        (* Authenticator stores credential IDs *)
 
+(* Diffie-hellman key exchange *)
+(* Diffie-Hellman Key Infra *)
+
+fun dhexp(group, exponent): group.
+equation forall a: exponent, b:exponent; 
+dhexp(dhexp(g,a),b) = dhexp(dhexp(g,b),a).
+
+fun enc(bitstring, group): bitstring.
+reduc forall m: bitstring, k: group; dec(enc(m,k),k) = m.
+
 (* Events for security properties verification *)
 event Client_Init_Auth(Username, RpId).                             (* Client initiates auth *)
 event Authnr_Finish_Auth(Username,AAGUID,bitstring,spkey).          (* Authenticator finishes auth *)
@@ -90,80 +99,105 @@ free sanity2:bitstring [private].
 free sanity3:bitstring [private].
 
 (* Security queries *)
-query attacker(sanity1).     (* Check if sanity1 is revealed by the load balancer *)
-(*query attacker(sanity2).*)     (* Check if sanity2 is revealed by the load balancer *)
+query attacker(sanity1).     (* Check if sanity1 can be obtained by the attacker *)
+query attacker(sanity2).     (* Check if sanity2 can be obtained by the attacker *)
 
-(*query attacker(bear_token).  (*Check if the bearer token remains secret *)*)
+query attacker(bear_token).  (* Check if the bearer token remains secret *)
 query u:Username, a:AAGUID, c:bitstring, pkau:spkey; event(Authnr_Finish_Auth(u,a,c,pkau)). (* Check if authenticator auth events occur *)
 
 query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; event(Server_Finish_Auth(u,r,a,c,pkau)). (* Check if server auth events occur *)
 
 (* Authentication property: if server completes auth, client must have initiated it *)
 query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; 
-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Client_Init_Auth(u,r)).
+inj-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> inj-event(Client_Init_Auth(u,r)).
 
 (* Authentication property: if server completes auth, authenticator must have completed its part *)
 query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; 
-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> event(Authnr_Finish_Auth(u,a,c,pkau)).
+inj-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> inj-event(Authnr_Finish_Auth(u,a,c,pkau)).
 
 (* Authentication property: complete authentication chain *)
 query u:Username, r:RpId, a:AAGUID, c:bitstring, pkau:spkey; 
-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> (event(Authnr_Finish_Auth(u,a,c,pkau)) ==> event(Client_Init_Auth(u,r))).
+inj-event(Server_Finish_Auth(u,r,a,c,pkau)) ==> (inj-event(Authnr_Finish_Auth(u,a,c,pkau)) ==> inj-event(Client_Init_Auth(u,r))).
 
 (* Relying Party Authentication Process *)
-let RP_Auth(rpid:RpId) =
-    (* Receive username from load balancer *)
-    in(LB_RP, username:Username);
+let RP_Auth(rpid:RpId, sskey_RP:sskey) =
+    (* Receive username directly from client *)
+    in(C_RP, username:Username);
+    
     (* Look up user's registered credentials *)
     get rp_record(=username, aaguid, credID, pkA) in
     (* Generate a challenge nonce *)
-    new challenge:Nonce;
-    (* Send challenge to client via load balancer *)
-    out(LB_RP, (rpid, challenge, credID));
+    new nonce:Nonce;
+    new dh_spairRP:exponent;
+    let dh_ppairRP = dhexp(g,dh_spairRP) in
+    let challenge = RP1(nonce, rpid, credID, dh_ppairRP) in
+    
+    (* Send challenge and signed challenge directly to client *)
+    let signed_challenge = sign(challenge, sskey_RP) in
+    out(C_RP, (challenge, signed_challenge));
+    
     (* Receive client's authentication response *)
-    in(LB_RP, (aData:bitstring, sig:bitstring, cdata:bitstring));
+    in(C_RP, (response:bitstring, signed_response:bitstring, cdata:bitstring));
+    
+    if checksign(signed_response, response, spk(sskey_RP)) = OK then
+    
+    let Auth4(aData, sig, credID_A, challenge_recv, dh_ppairA) = response in
+    if challenge_recv = challenge then
+    
     (* Verify challenge response data *)
-    if Client1(rpid, challenge) = cdata then
+    let Client1(rpid_c, nonce_c) = cdata in
+    
     (* Verify authenticator data *)
-    let Auth2(h_rpid, aaguid, credID, pkA) = aData in
+    let Auth2(h_rpid, aaguid, credID_A, pkA) = aData in
+    
     (* Verify RP ID hash *)
     if h_rpid = h(rpid) then
-    (* Verify signature *)
-    if checksign(sig, Auth3(aData,hash(cdata)), pkA) = OK then
-    (* Record successful authentication event *)
-    out(LB_RP, bear_token);
-    event Server_Finish_Auth(username,rpid,aaguid,credID,pkA)
-    (* Issue bearer token to client *)
+    let sig_val = Auth3(aData, hash(cdata)) in
     
+    (* Verify signature *)
+    if checksign(sig, sig_val, pkA) = OK then
+    out(reveal, sanity1);
+    
+    (* Record successful authentication event *)
+    
+    event Server_Finish_Auth(username,rpid,aaguid,credID_A,pkA);
+    (* Issue bearer token to client *)
+    let ck = dhexp(dh_ppairA, dh_spairRP) in
+    out(C_RP, enc(bear_token, ck))
 .
 
 (* Client Authentication Process *)
 let Client_Auth(client_id:ClientId, pinUVAuthToken:key, username:Username) =
-    (* Send username to RP via load balancer *)
-    out(C_LB, username);
+    (* Send username directly to RP *)
+    out(C_RP, username);
     (* Receive challenge from RP *)
-    in(C_LB, (rpid:RpId, challenge:Nonce, credID:bitstring));
+    in(C_RP, (challenge:bitstring, signed_challenge:bitstring));
+    let RP1(nonce, rpid, credID, dh_ppairRP) = challenge in
     (* Create client data containing challenge response *)
-    let cdata = Client1(rpid, challenge) in
+    let cdata = Client1(rpid, nonce) in
     (* Create PIN/UV auth token for the authenticator *)
     let pinAuth = (HMAC(pinUVAuthToken,hash(cdata))) in
     (* Record client authentication initiation *)
     event Client_Init_Auth(username, rpid);
     (* Send data to authenticator *)
-    out(A_C, (hash(cdata), credID, pinAuth));
+    out(A_C, (hash(cdata), pinAuth, challenge, signed_challenge));
     (* Receive signed response from authenticator *)
-    in(A_C, (aData:bitstring, sig:bitstring));
-    (* Forward authenticator response to RP via load balancer *)
-    out(C_LB, (aData, sig, cdata));
+    in(A_C, (response:bitstring, signed_response:bitstring));
+    (* Forward authenticator response directly to RP *)
+    out(C_RP, (response, signed_response, cdata));
     (* Receive access token from RP *)
-    in(C_LB, access_token:bitstring)
+    in(C_RP, enc_token:bitstring);
+    out(A_C, enc_token);
+    in(A_C, access_token:bitstring)
 .
 
 (* Authenticator Authentication Process *)
-let Auth_Auth(aaguid:AAGUID, wk:key, pinAuthToken:key) = 
+let Auth_Auth(aaguid:AAGUID, wk:key, pinAuthToken:key, sskey_RP:sskey) = 
     (* Receive request from client *)
-    in(A_C, (hcdata:bitstring, credID:bitstring, pinAuth:bitstring));
+    in(A_C, (hcdata:bitstring, pinAuth:bitstring, challenge:bitstring, signed_challenge:bitstring));
     (* Verify credential ID exists in authenticator storage *)
+    let RP1(nonce, rpid, credID, dh_ppairRP) = challenge in
+    if checksign(signed_challenge, challenge, spk(sskey_RP)) = OK then
     get auth_record(x) suchthat x = credID in
     (* Verify PIN/UV auth token *)
     if pinAuth = HMAC(pinAuthToken, hcdata) then
@@ -173,40 +207,19 @@ let Auth_Auth(aaguid:AAGUID, wk:key, pinAuthToken:key) =
     let aData = Auth2(h(rpid), aaguid, credID, spk(skA)) in
     (* Sign the combined authenticator data and client data hash *)
     let sig = sign(Auth3(aData,hcdata),skA) in
+    new dh_spairA:exponent;
+    let dh_ppairA = dhexp(g,dh_spairA) in
+    let response = Auth4(aData, sig, credID, challenge, dh_ppairA) in
+    let signed_response = sign(response, sskey_RP) in
     (* Record successful authenticator verification *)
     event Authnr_Finish_Auth(username,aaguid,credID,spk(skA));
     (* Send signed response back to client *)
-    out(A_C, (aData, sig))
+    out(A_C, (response, signed_response));
+    in(A_C, enc_token:bitstring);
+    let ck = dhexp(dh_ppairRP, dh_spairA) in
+    let access_token = dec(enc_token, ck) in
+    out(A_C, access_token)
 .   
-
-(* Load Balancer Process - acts as a man-in-the-middle that reveals traffic *)
-let LoadBalancer() =
-    (* Receive username from client *)
-    in(C_LB, username:Username);
-    (* Reveal first sanity check and username to attacker *)
-    out(reveal, username);
-    (* Forward username to RP *)
-    out(LB_RP, username);
-    (* Receive challenge from RP *)
-    in(LB_RP, (rpid:RpId, challenge:Nonce, credID:bitstring));
-    (* Reveal challenge data to attacker *)
-    out(reveal, (rpid, challenge, credID));
-    (* Forward challenge to client *)
-    out(C_LB, (rpid, challenge, credID));
-    (* Receive authentication response from client *)
-    in(C_LB, (aData:bitstring, sig:bitstring, cdata:bitstring));
-    (* Reveal authentication response to attacker *)
-    out(reveal, (aData, sig, cdata));
-    (* Forward authentication response to RP *)
-    out(LB_RP, (aData, sig, cdata));
-    (* Receive token from RP *)
-    
-    in(LB_RP, token:bitstring);
-    (* Reveal second sanity check to attacker *)
-    out(reveal, token);
-    (* Forward token to client *)
-    out(C_LB, token)
-.
 
 (* Main Process *)
 process
@@ -218,10 +231,11 @@ process
     new aaguid:AAGUID;        (* Authenticator identifier *)
     new username:Username;
     new skA:sskey;            (* User's signing key *)
+    new sskey_RP:sskey;
     (* Create encrypted credential *)
     let credID = senc(Auth1(username, rpid, skA), wk) in
     (* Store credential in RP and authenticator databases *)
     insert rp_record(username, aaguid, credID, spk(skA));
     insert auth_record(credID);
-    (* Start parallel processes: RP, Client, Authenticator, and LoadBalancer *)
-    !RP_Auth(rpid) | !Client_Auth(clientid, pinAuth, username) | !Auth_Auth(aaguid, wk, pinAuth) | (!LoadBalancer())
+    (* Start parallel processes: RP, Client, and Authenticator - no Load Balancer *)
+    RP_Auth(rpid, sskey_RP) | Client_Auth(clientid, pinAuth, username) | Auth_Auth(aaguid, wk, pinAuth, sskey_RP)

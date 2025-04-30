@@ -2,492 +2,122 @@ digraph {
 graph [ordering = out]
 edge [arrowhead = none, penwidth = 1.6, fontsize = 30]
 node [shape = point, width = 0, height = 0, fontsize = 30]
-Trace [label = <A trace has been found.<br/>
+Trace<br/>
+[label = <A trace has been found.<br/>
 >, shape = plaintext]
 P0__0 [label = "Honest Process", shape = plaintext]
 P__0 [label = "Attacker", shape = plaintext]
 Trace -> P0__0 [label = "", style = invisible, weight = 100]{rank = same; P0__0 P__0}
 P0__0 -> P0__1 [label = <>, weight = 100]
 P0__1 -> P0__2 [label = <>, weight = 100]
-P0__2 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{1}</FONT><FONT COLOR="blue">new </FONT>rpid_5</TD></TR><TR><TD><FONT COLOR="darkgreen">{2}</FONT><FONT COLOR="blue">new </FONT>clientid_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{3}</FONT><FONT COLOR="blue">new </FONT>pinAuth_3</TD></TR><TR><TD><FONT COLOR="darkgreen">{4}</FONT><FONT COLOR="blue">new </FONT>wk_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{5}</FONT><FONT COLOR="blue">new </FONT>aaguid_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{6}</FONT><FONT COLOR="blue">new </FONT>username_5</TD></TR><TR><TD><FONT COLOR="darkgreen">{7}</FONT><FONT COLOR="blue">new </FONT>skA_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{9}</FONT><FONT COLOR="blue">insert </FONT>rp_record(username_5,aaguid_4,senc(Auth1(<br/>
-username_5,rpid_5,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{10}</FONT><FONT COLOR="blue">insert </FONT>auth_record(senc(Auth1(username_5,rpid_5,<br/>
+P0__2 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{1}</FONT><FONT COLOR="blue">new </FONT>rpid_5</TD></TR><TR><TD><FONT COLOR="darkgreen">{2}</FONT><FONT COLOR="blue">new </FONT>clientid_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{3}</FONT><FONT COLOR="blue">new </FONT>pinAuth_3</TD></TR><TR><TD><FONT COLOR="darkgreen">{4}</FONT><FONT COLOR="blue">new </FONT>wk_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{5}</FONT><FONT COLOR="blue">new </FONT>aaguid_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{6}</FONT><FONT COLOR="blue">new </FONT>username_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{7}</FONT><FONT COLOR="blue">new </FONT>skA_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{8}</FONT><FONT COLOR="blue">new </FONT>sskey_RP_3</TD></TR><TR><TD><FONT COLOR="darkgreen">{10}</FONT><FONT COLOR="blue">insert </FONT>rp_record(username_4,aaguid_4,senc(<br/>
+Auth1(username_4,rpid_5,skA_2),wk_2),spk(skA_2))<br/>
+</TD></TR><TR><TD><FONT COLOR="darkgreen">{11}</FONT><FONT COLOR="blue">insert </FONT>auth_record(senc(Auth1(username_4,rpid_5,<br/>
 skA_2),wk_2))</TD></TR></TABLE>>]
 P0__2 -> P0__3 [label = <>, weight = 100]
 P__0 -> P__1 [label = <>, weight = 100]
 {rank = same; P__1 P0__2}
 /*RPar */
-P0__3 -> P0_3__3 [label = <>]
 P0__3 -> P0_2__3 [label = <>]
 P0__3 -> P0_1__3 [label = <>]
 P0__3 -> P0_0__3 [label = <>]
 P0__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-{rank = same; P0_0__3 P0_1__3 P0_2__3 P0_3__3}
-P0_0__3 [label = "!", shape = ellipse]
-{rank = same; P0_0_4__3 P0_0_3__3 P0_0_2__3 P0_0_1__3 P0_0_0__3}
-P0_0_4__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_0__3 -> P0_0_4__3 [label = <>]
-P0_0_3__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_0__3 -> P0_0_3__3 [label = <>]
-P0_0_2__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_0__3 -> P0_0_2__3 [label = <>]
-P0_0_1__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_0__3 -> P0_0_1__3 [label = <>]
-P0_0_0__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_0__3 -> P0_0_0__3 [label = <>]
-P0_0_0__3 -> P0_0_0__4 [label = <>, weight = 100]
-P0_0_0__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">LoadBalancer</FONT></TD></TR></TABLE>>]
-P0_0_0__4 -> P0_0_0__5 [label = <>, weight = 100]
-P0_0_1__3 -> P0_0_1__4 [label = <>, weight = 100]
-P0_0_1__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">LoadBalancer</FONT></TD></TR></TABLE>>]
-P0_0_1__4 -> P0_0_1__5 [label = <>, weight = 100]
-P0_0_2__3 -> P0_0_2__4 [label = <>, weight = 100]
-P0_0_2__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">LoadBalancer</FONT></TD></TR></TABLE>>]
-P0_0_2__4 -> P0_0_2__5 [label = <>, weight = 100]
-P0_0_3__3 -> P0_0_3__4 [label = <>, weight = 100]
-P0_0_3__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">LoadBalancer</FONT></TD></TR></TABLE>>]
-P0_0_3__4 -> P0_0_3__5 [label = <>, weight = 100]
-P0_0_4__3 -> P0_0_4__4 [label = <>, weight = 100]
-P0_0_4__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">LoadBalancer</FONT></TD></TR></TABLE>>]
-P0_0_4__4 -> P0_0_4__5 [label = <>, weight = 100]
-P0_1__3 [label = "!", shape = ellipse]
-P0_2__3 [label = "!", shape = ellipse]
-{rank = same; P0_2_4__3 P0_2_3__3 P0_2_2__3 P0_2_1__3 P0_2_0__3}
-P0_2_4__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_2__3 -> P0_2_4__3 [label = <>]
-P0_2_3__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_2__3 -> P0_2_3__3 [label = <>]
-P0_2_2__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_2__3 -> P0_2_2__3 [label = <>]
-P0_2_1__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_2__3 -> P0_2_1__3 [label = <>]
-P0_2_0__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_2__3 -> P0_2_0__3 [label = <>]
-P0_2_0__3 -> P0_2_0__4 [label = <>, weight = 100]
-P0_2_0__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Client_Auth</FONT></TD></TR></TABLE>>]
-P0_2_0__4 -> P0_2_0__5 [label = <>, weight = 100]
-P0_2_1__3 -> P0_2_1__4 [label = <>, weight = 100]
-P0_2_1__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Client_Auth</FONT></TD></TR></TABLE>>]
-P0_2_1__4 -> P0_2_1__5 [label = <>, weight = 100]
-P0_2_2__3 -> P0_2_2__4 [label = <>, weight = 100]
-P0_2_2__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Client_Auth</FONT></TD></TR></TABLE>>]
-P0_2_2__4 -> P0_2_2__5 [label = <>, weight = 100]
-P0_2_3__3 -> P0_2_3__4 [label = <>, weight = 100]
-P0_2_3__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Client_Auth</FONT></TD></TR></TABLE>>]
-P0_2_3__4 -> P0_2_3__5 [label = <>, weight = 100]
-P0_2_4__3 -> P0_2_4__4 [label = <>, weight = 100]
-P0_2_4__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Client_Auth</FONT></TD></TR></TABLE>>]
-P0_2_4__4 -> P0_2_4__5 [label = <>, weight = 100]
-P0_3__3 [label = "!", shape = ellipse]
-{rank = same; P0_3_1__3 P0_3_0__3}
-P0_3_1__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_3__3 -> P0_3_1__3 [label = <>]
-P0_3_0__3 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
-P0_3__3 -> P0_3_0__3 [label = <>]
-P0_3_0__3 -> P0_3_0__4 [label = <>, weight = 100]
-P0_3_0__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">RP_Auth</FONT></TD></TR></TABLE>>]
-P0_3_0__4 -> P0_3_0__5 [label = <>, weight = 100]
-P0_3_1__3 -> P0_3_1__4 [label = <>, weight = 100]
-P0_3_1__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">RP_Auth</FONT></TD></TR></TABLE>>]
-P0_3_1__4 -> P0_3_1__5 [label = <>, weight = 100]
-P0_2_4__5 -> P0_2_4__6 [label = <>, weight = 100]
-P0_2_3__5 -> P0_2_3__6 [label = <>, weight = 100]
-P0_2_2__5 -> P0_2_2__6 [label = <>, weight = 100]
-P0_2_1__5 -> P0_2_1__6 [label = <>, weight = 100]
-P0_2_0__5 -> P0_2_0__6 [label = <>, weight = 100]
-P0_1__4 [label = "", style = invisible]
-P0_1__3 -> P0_1__4 [label = <>, weight = 100, style = invisible]
-P0_0_4__5 -> P0_0_4__6 [label = <>, weight = 100]
-{rank = same; P0_0_4__6 P0_1__4 P0_2_0__6 P0_2_1__6 P0_2_2__6 P0_2_3__6 P0_2_4__6}
-P0_2_4__6 -> P0_2_4__7 [label = <>, weight = 100]
-P0_0_4__6 -> P0_0_4__7 [label = <>, weight = 100]
-{rank = same; P0_0_4__7 P0_2_4__7}
-P0_2_4__7 -> P0_0_4__7 [label = <username_5>, arrowhead = normal]
-P0_2_4__7 -> P0_2_4__8 [label = <>, weight = 100]
-P0_2_3__6 -> P0_2_3__7 [label = <>, weight = 100]
-P0_2_2__6 -> P0_2_2__7 [label = <>, weight = 100]
-P0_2_1__6 -> P0_2_1__7 [label = <>, weight = 100]
-P0_2_0__6 -> P0_2_0__7 [label = <>, weight = 100]
-P0_1__5 [label = "", style = invisible]
-P0_1__4 -> P0_1__5 [label = <>, weight = 100, style = invisible]
-P0_0_4__7 -> P0_0_4__8 [label = <>, weight = 100]
-{rank = same; P0_0_4__8 P0_1__5 P0_2_0__7 P0_2_1__7 P0_2_2__7 P0_2_3__7 P0_2_4__8}
-P0_0_4__8 -> P0_0_4__9 [label = <>, weight = 100]
-P0_0_3__5 -> P0_0_3__6 [label = <>, weight = 100]
-P0_0_2__5 -> P0_0_2__6 [label = <>, weight = 100]
-P0_0_1__5 -> P0_0_1__6 [label = <>, weight = 100]
-P0_0_0__5 -> P0_0_0__6 [label = <>, weight = 100]
+{rank = same; P0_0__3 P0_1__3 P0_2__3}
+P0_0__3 -> P0_0__4 [label = <>, weight = 100]
+P0_0__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Auth_Auth</FONT></TD></TR></TABLE>>]
+P0_0__4 -> P0_0__5 [label = <>, weight = 100]
+P0_1__3 -> P0_1__4 [label = <>, weight = 100]
+P0_1__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Client_Auth</FONT></TD></TR></TABLE>>]
+P0_1__4 -> P0_1__5 [label = <>, weight = 100]
+P0_1__5 -> P0_1__6 [label = <>, weight = 100]
+P0_0__5 -> P0_0__6 [label = <>, weight = 100]
 P__1 -> P__2 [label = <>, weight = 100]
-{rank = same; P__2 P0_0_0__6 P0_0_1__6 P0_0_2__6 P0_0_3__6 P0_0_4__9}
-P0_0_4__9 -> P0_0_4__10 [label = <>, weight = 100]
+{rank = same; P__2 P0_0__6 P0_1__6}
+P0_1__6 -> P0_1__7 [label = <>, weight = 100]
 P__2 -> P__3 [label = <>, weight = 100]
-{rank = same; P__3 P0_0_4__10}
-P0_0_4__10 -> P__3 [label = <~M = sanity1>, arrowhead = normal]
-P0_0_4__10 -> P0_0_4__11 [label = <>, weight = 100]
-P0_0_3__6 -> P0_0_3__7 [label = <>, weight = 100]
-P0_0_2__6 -> P0_0_2__7 [label = <>, weight = 100]
-P0_0_1__6 -> P0_0_1__7 [label = <>, weight = 100]
-P0_0_0__6 -> P0_0_0__7 [label = <>, weight = 100]
+{rank = same; P__3 P0_1__7}
+P0_1__7 -> P__3 [label = <~M = username_4>, arrowhead = normal]
+P0_1__7 -> P0_1__8 [label = <>, weight = 100]
+P0_0__6 -> P0_0__7 [label = <>, weight = 100]
 P__3 -> P__4 [label = <>, weight = 100]
-{rank = same; P__4 P0_0_0__7 P0_0_1__7 P0_0_2__7 P0_0_3__7 P0_0_4__11}
-P0_3_1__5 -> P0_3_1__6 [label = <>, weight = 100]
-P0_3_0__5 -> P0_3_0__6 [label = <>, weight = 100]
-P0_2_4__8 -> P0_2_4__9 [label = <>, weight = 100]
-P0_2_3__7 -> P0_2_3__8 [label = <>, weight = 100]
-P0_2_2__7 -> P0_2_2__8 [label = <>, weight = 100]
-P0_2_1__7 -> P0_2_1__8 [label = <>, weight = 100]
-P0_2_0__7 -> P0_2_0__8 [label = <>, weight = 100]
-P0_1__6 [label = "", style = invisible]
-P0_1__5 -> P0_1__6 [label = <>, weight = 100, style = invisible]
-P0_0_4__11 -> P0_0_4__12 [label = <>, weight = 100]
-{rank = same; P0_0_4__12 P0_1__6 P0_2_0__8 P0_2_1__8 P0_2_2__8 P0_2_3__8 P0_2_4__9 P0_3_0__6 P0_3_1__6}
-P0_3_1__6 -> P0_3_1__7 [label = <>, weight = 100]
-P0_0_4__12 -> P0_0_4__13 [label = <>, weight = 100]
-{rank = same; P0_0_4__13 P0_3_1__7}
-P0_3_1__7 -> P0_0_4__13 [label = <username_5>, dir = back, arrowhead = normal]
-P0_3_1__7 -> P0_3_1__8 [label = <>, weight = 100]
-P0_3_0__6 -> P0_3_0__7 [label = <>, weight = 100]
-P0_2_4__9 -> P0_2_4__10 [label = <>, weight = 100]
-P0_2_3__8 -> P0_2_3__9 [label = <>, weight = 100]
-P0_2_2__8 -> P0_2_2__9 [label = <>, weight = 100]
-P0_2_1__8 -> P0_2_1__9 [label = <>, weight = 100]
-P0_2_0__8 -> P0_2_0__9 [label = <>, weight = 100]
-P0_1__7 [label = "", style = invisible]
-P0_1__6 -> P0_1__7 [label = <>, weight = 100, style = invisible]
-P0_0_4__13 -> P0_0_4__14 [label = <>, weight = 100]
-{rank = same; P0_0_4__14 P0_1__7 P0_2_0__9 P0_2_1__9 P0_2_2__9 P0_2_3__9 P0_2_4__10 P0_3_0__7 P0_3_1__8}
-P0_3_1__8 -> P0_3_1__9 [label = <>, weight = 100]
-P0_3_1__9 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{23}</FONT><FONT COLOR="blue">get </FONT>rp_record(username_5,aaguid_4,senc(Auth1(<br/>
-username_5,rpid_5,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{14}</FONT><FONT COLOR="blue">new </FONT>challenge_5</TD></TR></TABLE>>]
-P0_3_1__9 -> P0_3_1__10 [label = <>, weight = 100]
+{rank = same; P__4 P0_0__7 P0_1__8}
+P0_2__3 -> P0_2__4 [label = <>, weight = 100]
+P0_2__4 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">RP_Auth</FONT></TD></TR></TABLE>>]
+P0_2__4 -> P0_2__5 [label = <>, weight = 100]
+P0_2__5 -> P0_2__6 [label = <>, weight = 100]
+P0_1__8 -> P0_1__9 [label = <>, weight = 100]
+P0_0__7 -> P0_0__8 [label = <>, weight = 100]
 P__4 -> P__5 [label = <>, weight = 100]
-{rank = same; P__5 P0_3_1__9}
-P0_2_4__10 -> P0_2_4__11 [label = <>, weight = 100]
-P0_2_3__9 -> P0_2_3__10 [label = <>, weight = 100]
-{rank = same; P0_2_3__10 P0_2_4__11}
-P0_2_4__11 -> P0_2_4__12 [label = <>, weight = 100]
-P0_2_3__10 -> P0_2_3__11 [label = <>, weight = 100]
-{rank = same; P0_2_3__11 P0_2_4__12}
-P0_2_4__12 -> P0_2_3__11 [label = <username_5>, dir = back, arrowhead = normal]
-P0_2_4__12 -> P0_2_4__13 [label = <>, weight = 100]
-P0_2_3__11 -> P0_2_3__12 [label = <>, weight = 100]
-{rank = same; P0_2_3__12 P0_2_4__13}
-P0_2_4__14 [label = "", width = 0.3, height = 0.3]
-P0_2_4__13 -> P0_2_4__14 [label = <>, weight = 100]
-P0_2_3__12 -> P0_2_3__13 [label = <>, weight = 100]
-P0_2_2__9 -> P0_2_2__10 [label = <>, weight = 100]
-{rank = same; P0_2_2__10 P0_2_3__13}
-P0_2_3__13 -> P0_2_3__14 [label = <>, weight = 100]
-P0_2_2__10 -> P0_2_2__11 [label = <>, weight = 100]
-{rank = same; P0_2_2__11 P0_2_3__14}
-P0_2_3__14 -> P0_2_2__11 [label = <username_5>, dir = back, arrowhead = normal]
-P0_2_3__14 -> P0_2_3__15 [label = <>, weight = 100]
-P0_2_2__11 -> P0_2_2__12 [label = <>, weight = 100]
-{rank = same; P0_2_2__12 P0_2_3__15}
-P0_2_3__16 [label = "", width = 0.3, height = 0.3]
-P0_2_3__15 -> P0_2_3__16 [label = <>, weight = 100]
-P0_2_2__12 -> P0_2_2__13 [label = <>, weight = 100]
-P0_2_1__9 -> P0_2_1__10 [label = <>, weight = 100]
-{rank = same; P0_2_1__10 P0_2_2__13}
-P0_2_2__13 -> P0_2_2__14 [label = <>, weight = 100]
-P0_2_1__10 -> P0_2_1__11 [label = <>, weight = 100]
-{rank = same; P0_2_1__11 P0_2_2__14}
-P0_2_2__14 -> P0_2_1__11 [label = <username_5>, dir = back, arrowhead = normal]
-P0_2_2__14 -> P0_2_2__15 [label = <>, weight = 100]
-P0_2_1__11 -> P0_2_1__12 [label = <>, weight = 100]
-{rank = same; P0_2_1__12 P0_2_2__15}
-P0_2_2__16 [label = "", width = 0.3, height = 0.3]
-P0_2_2__15 -> P0_2_2__16 [label = <>, weight = 100]
-P0_3_1__10 -> P0_3_1__11 [label = <>, weight = 100]
-P0_3_0__7 -> P0_3_0__8 [label = <>, weight = 100]
-P0_2_4__15 [label = "", style = invisible]
-P0_2_4__14 -> P0_2_4__15 [label = <>, weight = 100, style = invisible]
-P0_2_3__17 [label = "", style = invisible]
-P0_2_3__16 -> P0_2_3__17 [label = <>, weight = 100, style = invisible]
-P0_2_2__17 [label = "", style = invisible]
-P0_2_2__16 -> P0_2_2__17 [label = <>, weight = 100, style = invisible]
-P0_2_1__12 -> P0_2_1__13 [label = <>, weight = 100]
-P0_2_0__9 -> P0_2_0__10 [label = <>, weight = 100]
-P0_1__8 [label = "", style = invisible]
-P0_1__7 -> P0_1__8 [label = <>, weight = 100, style = invisible]
-P0_0_4__14 -> P0_0_4__15 [label = <>, weight = 100]
-{rank = same; P0_0_4__15 P0_1__8 P0_2_0__10 P0_2_1__13 P0_2_2__17 P0_2_3__17 P0_2_4__15 P0_3_0__8 P0_3_1__11}
-P0_3_1__11 -> P0_3_1__12 [label = <>, weight = 100]
-P0_0_4__15 -> P0_0_4__16 [label = <>, weight = 100]
-{rank = same; P0_0_4__16 P0_3_1__12}
-P0_3_1__12 -> P0_0_4__16 [label = <(rpid_5,challenge_5,senc(Auth1(username_5,rpid_5,<br/>
-skA_2),wk_2))>, arrowhead = normal]
-P0_3_1__12 -> P0_3_1__13 [label = <>, weight = 100]
-P0_3_0__8 -> P0_3_0__9 [label = <>, weight = 100]
-P0_2_4__16 [label = "", style = invisible]
-P0_2_4__15 -> P0_2_4__16 [label = <>, weight = 100, style = invisible]
-P0_2_3__18 [label = "", style = invisible]
-P0_2_3__17 -> P0_2_3__18 [label = <>, weight = 100, style = invisible]
-P0_2_2__18 [label = "", style = invisible]
-P0_2_2__17 -> P0_2_2__18 [label = <>, weight = 100, style = invisible]
-P0_2_1__13 -> P0_2_1__14 [label = <>, weight = 100]
-P0_2_0__10 -> P0_2_0__11 [label = <>, weight = 100]
-P0_1__9 [label = "", style = invisible]
-P0_1__8 -> P0_1__9 [label = <>, weight = 100, style = invisible]
-P0_0_4__16 -> P0_0_4__17 [label = <>, weight = 100]
-{rank = same; P0_0_4__17 P0_1__9 P0_2_0__11 P0_2_1__14 P0_2_2__18 P0_2_3__18 P0_2_4__16 P0_3_0__9 P0_3_1__13}
-P0_0_4__17 -> P0_0_4__18 [label = <>, weight = 100]
-P0_0_3__7 -> P0_0_3__8 [label = <>, weight = 100]
-P0_0_2__7 -> P0_0_2__8 [label = <>, weight = 100]
-P0_0_1__7 -> P0_0_1__8 [label = <>, weight = 100]
-P0_0_0__7 -> P0_0_0__8 [label = <>, weight = 100]
+{rank = same; P__5 P0_0__8 P0_1__9 P0_2__6}
+P0_2__6 -> P0_2__7 [label = <>, weight = 100]
 P__5 -> P__6 [label = <>, weight = 100]
-{rank = same; P__6 P0_0_0__8 P0_0_1__8 P0_0_2__8 P0_0_3__8 P0_0_4__18}
-P0_0_4__18 -> P0_0_4__19 [label = <>, weight = 100]
+{rank = same; P__6 P0_2__7}
+P0_2__7 -> P__6 [label = <~M = username_4>, dir = back, arrowhead = normal]
+P0_2__7 -> P0_2__8 [label = <>, weight = 100]
+P0_1__9 -> P0_1__10 [label = <>, weight = 100]
+P0_0__8 -> P0_0__9 [label = <>, weight = 100]
 P__6 -> P__7 [label = <>, weight = 100]
-{rank = same; P__7 P0_0_4__19}
-P0_0_4__19 -> P__7 [label = <(~M_1,~M_2,~M_3) = (rpid_5,challenge_5,senc(Auth1(<br/>
-username_5,rpid_5,skA_2),wk_2))>, arrowhead = normal]
-P0_0_4__19 -> P0_0_4__20 [label = <>, weight = 100]
-P0_0_3__8 -> P0_0_3__9 [label = <>, weight = 100]
-P0_0_2__8 -> P0_0_2__9 [label = <>, weight = 100]
-P0_0_1__8 -> P0_0_1__9 [label = <>, weight = 100]
-P0_0_0__8 -> P0_0_0__9 [label = <>, weight = 100]
+{rank = same; P__7 P0_0__9 P0_1__10 P0_2__8}
+P0_2__8 -> P0_2__9 [label = <>, weight = 100]
+P0_2__9 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{34}</FONT><FONT COLOR="blue">get </FONT>rp_record(username_4,aaguid_4,senc(Auth1(<br/>
+username_4,rpid_5,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{15}</FONT><FONT COLOR="blue">new </FONT>nonce_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{16}</FONT><FONT COLOR="blue">new </FONT>dh_spairRP_2</TD></TR></TABLE>>]
+P0_2__9 -> P0_2__10 [label = <>, weight = 100]
 P__7 -> P__8 [label = <>, weight = 100]
-{rank = same; P__8 P0_0_0__9 P0_0_1__9 P0_0_2__9 P0_0_3__9 P0_0_4__20}
-P0_2_0__11 -> P0_2_0__12 [label = <>, weight = 100]
-P0_1__10 [label = "", style = invisible]
-P0_1__9 -> P0_1__10 [label = <>, weight = 100, style = invisible]
-P0_0_4__20 -> P0_0_4__21 [label = <>, weight = 100]
-P0_0_3__9 -> P0_0_3__10 [label = <>, weight = 100]
-{rank = same; P0_0_3__10 P0_0_4__21 P0_1__10 P0_2_0__12}
-P0_2_0__12 -> P0_2_0__13 [label = <>, weight = 100]
-P0_0_3__10 -> P0_0_3__11 [label = <>, weight = 100]
-{rank = same; P0_0_3__11 P0_2_0__13}
-P0_2_0__13 -> P0_0_3__11 [label = <username_5>, arrowhead = normal]
-P0_2_0__13 -> P0_2_0__14 [label = <>, weight = 100]
-P0_1__11 [label = "", style = invisible]
-P0_1__10 -> P0_1__11 [label = <>, weight = 100, style = invisible]
-P0_0_4__21 -> P0_0_4__22 [label = <>, weight = 100]
-P0_0_3__11 -> P0_0_3__12 [label = <>, weight = 100]
-{rank = same; P0_0_3__12 P0_0_4__22 P0_1__11 P0_2_0__14}
-P0_0_3__12 -> P0_0_3__13 [label = <>, weight = 100]
-P0_0_2__9 -> P0_0_2__10 [label = <>, weight = 100]
-P0_0_1__9 -> P0_0_1__10 [label = <>, weight = 100]
-P0_0_0__9 -> P0_0_0__10 [label = <>, weight = 100]
+{rank = same; P__8 P0_2__9}
+P0_2__10 -> P0_2__11 [label = <>, weight = 100]
+P0_1__10 -> P0_1__11 [label = <>, weight = 100]
+P0_0__9 -> P0_0__10 [label = <>, weight = 100]
 P__8 -> P__9 [label = <>, weight = 100]
-{rank = same; P__9 P0_0_0__10 P0_0_1__10 P0_0_2__10 P0_0_3__13}
-P0_0_3__13 -> P0_0_3__14 [label = <>, weight = 100]
+{rank = same; P__9 P0_0__10 P0_1__11 P0_2__11}
+P0_2__11 -> P0_2__12 [label = <>, weight = 100]
 P__9 -> P__10 [label = <>, weight = 100]
-{rank = same; P__10 P0_0_3__14}
-P0_0_3__14 -> P__10 [label = <~M_4 = sanity1>, arrowhead = normal]
-P0_0_3__14 -> P0_0_3__15 [label = <>, weight = 100]
-P0_0_2__10 -> P0_0_2__11 [label = <>, weight = 100]
-P0_0_1__10 -> P0_0_1__11 [label = <>, weight = 100]
-P0_0_0__10 -> P0_0_0__11 [label = <>, weight = 100]
+{rank = same; P__10 P0_2__12}
+P0_2__12 -> P__10 [label = <(RP1(~M_1,~M_2,~M_3,~M_4),~M_5)>, arrowhead = normal]
+P0_2__12 -> P0_2__13 [label = <>, weight = 100]
+P0_1__11 -> P0_1__12 [label = <>, weight = 100]
+P0_0__10 -> P0_0__11 [label = <>, weight = 100]
 P__10 -> P__11 [label = <>, weight = 100]
-{rank = same; P__11 P0_0_0__11 P0_0_1__11 P0_0_2__11 P0_0_3__15}
-P0_3_1__13 -> P0_3_1__14 [label = <>, weight = 100]
-P0_3_0__9 -> P0_3_0__10 [label = <>, weight = 100]
-P0_2_4__17 [label = "", style = invisible]
-P0_2_4__16 -> P0_2_4__17 [label = <>, weight = 100, style = invisible]
-P0_2_3__19 [label = "", style = invisible]
-P0_2_3__18 -> P0_2_3__19 [label = <>, weight = 100, style = invisible]
-P0_2_2__19 [label = "", style = invisible]
-P0_2_2__18 -> P0_2_2__19 [label = <>, weight = 100, style = invisible]
-P0_2_1__14 -> P0_2_1__15 [label = <>, weight = 100]
-P0_2_0__14 -> P0_2_0__15 [label = <>, weight = 100]
-P0_1__12 [label = "", style = invisible]
-P0_1__11 -> P0_1__12 [label = <>, weight = 100, style = invisible]
-P0_0_4__22 -> P0_0_4__23 [label = <>, weight = 100]
-P0_0_3__15 -> P0_0_3__16 [label = <>, weight = 100]
-{rank = same; P0_0_3__16 P0_0_4__23 P0_1__12 P0_2_0__15 P0_2_1__15 P0_2_2__19 P0_2_3__19 P0_2_4__17 P0_3_0__10 P0_3_1__14}
-P0_3_1__14 -> P0_3_1__15 [label = <>, weight = 100]
-P0_0_3__16 -> P0_0_3__17 [label = <>, weight = 100]
-{rank = same; P0_0_3__17 P0_3_1__15}
-P0_3_1__15 -> P0_0_3__17 [label = <username_5>, dir = back, arrowhead = normal]
-P0_3_1__15 -> P0_3_1__16 [label = <>, weight = 100]
-P0_3_0__10 -> P0_3_0__11 [label = <>, weight = 100]
-P0_2_4__18 [label = "", style = invisible]
-P0_2_4__17 -> P0_2_4__18 [label = <>, weight = 100, style = invisible]
-P0_2_3__20 [label = "", style = invisible]
-P0_2_3__19 -> P0_2_3__20 [label = <>, weight = 100, style = invisible]
-P0_2_2__20 [label = "", style = invisible]
-P0_2_2__19 -> P0_2_2__20 [label = <>, weight = 100, style = invisible]
-P0_2_1__15 -> P0_2_1__16 [label = <>, weight = 100]
-P0_2_0__15 -> P0_2_0__16 [label = <>, weight = 100]
-P0_1__13 [label = "", style = invisible]
-P0_1__12 -> P0_1__13 [label = <>, weight = 100, style = invisible]
-P0_0_4__23 -> P0_0_4__24 [label = <>, weight = 100]
-P0_0_3__17 -> P0_0_3__18 [label = <>, weight = 100]
-{rank = same; P0_0_3__18 P0_0_4__24 P0_1__13 P0_2_0__16 P0_2_1__16 P0_2_2__20 P0_2_3__20 P0_2_4__18 P0_3_0__11 P0_3_1__16}
-P0_3_1__17 [label = "", width = 0.3, height = 0.3]
-P0_3_1__16 -> P0_3_1__17 [label = <>, weight = 100]
-P0_0_4__24 -> P0_0_4__25 [label = <>, weight = 100]
-P0_0_3__18 -> P0_0_3__19 [label = <>, weight = 100]
-P0_0_2__11 -> P0_0_2__12 [label = <>, weight = 100]
-{rank = same; P0_0_2__12 P0_0_3__19 P0_0_4__25}
-P0_0_4__25 -> P0_0_4__26 [label = <>, weight = 100]
-P0_0_2__12 -> P0_0_2__13 [label = <>, weight = 100]
-{rank = same; P0_0_2__13 P0_0_4__26}
-P0_0_4__26 -> P0_0_2__13 [label = <(rpid_5,challenge_5,senc(Auth1(username_5,rpid_5,<br/>
-skA_2),wk_2))>, arrowhead = normal]
-P0_0_4__26 -> P0_0_4__27 [label = <>, weight = 100]
-P0_0_3__19 -> P0_0_3__20 [label = <>, weight = 100]
-P0_0_2__13 -> P0_0_2__14 [label = <>, weight = 100]
-{rank = same; P0_0_2__14 P0_0_3__20 P0_0_4__27}
-P0_0_2__14 -> P0_0_2__15 [label = <>, weight = 100]
-P0_0_1__11 -> P0_0_1__12 [label = <>, weight = 100]
-P0_0_0__11 -> P0_0_0__12 [label = <>, weight = 100]
+{rank = same; P__11 P0_0__11 P0_1__12 P0_2__13}
+P0_1__12 -> P0_1__13 [label = <>, weight = 100]
+P0_0__11 -> P0_0__12 [label = <>, weight = 100]
 P__11 -> P__12 [label = <>, weight = 100]
-{rank = same; P__12 P0_0_0__12 P0_0_1__12 P0_0_2__15}
-P0_0_2__15 -> P0_0_2__16 [label = <>, weight = 100]
+{rank = same; P__12 P0_0__12 P0_1__13}
+P0_1__13 -> P0_1__14 [label = <>, weight = 100]
 P__12 -> P__13 [label = <>, weight = 100]
-{rank = same; P__13 P0_0_2__16}
-P0_0_2__16 -> P__13 [label = <~M_5 = sanity1>, arrowhead = normal]
-P0_0_2__16 -> P0_0_2__17 [label = <>, weight = 100]
-P0_0_1__12 -> P0_0_1__13 [label = <>, weight = 100]
-P0_0_0__12 -> P0_0_0__13 [label = <>, weight = 100]
+{rank = same; P__13 P0_1__14}
+P0_1__14 -> P__13 [label = <(RP1(~M_1,~M_2,~M_3,~M_4),~M_5)>, dir = back, arrowhead = normal]
+P0_1__14 -> P0_1__15 [label = <>, weight = 100]
+P0_0__12 -> P0_0__13 [label = <>, weight = 100]
 P__13 -> P__14 [label = <>, weight = 100]
-{rank = same; P__14 P0_0_0__13 P0_0_1__13 P0_0_2__17}
-P0_0_3__20 -> P0_0_3__21 [label = <>, weight = 100]
-P0_0_2__17 -> P0_0_2__18 [label = <>, weight = 100]
-{rank = same; P0_0_2__18 P0_0_3__21}
-P0_0_3__21 -> P0_0_3__22 [label = <>, weight = 100]
-P0_0_2__18 -> P0_0_2__19 [label = <>, weight = 100]
-{rank = same; P0_0_2__19 P0_0_3__22}
-P0_0_3__22 -> P0_0_2__19 [label = <(rpid_5,challenge_5,senc(Auth1(username_5,rpid_5,<br/>
-skA_2),wk_2))>, dir = back, arrowhead = normal]
-P0_0_3__22 -> P0_0_3__23 [label = <>, weight = 100]
-P0_0_2__19 -> P0_0_2__20 [label = <>, weight = 100]
-{rank = same; P0_0_2__20 P0_0_3__23}
-P0_0_3__23 -> P0_0_3__24 [label = <>, weight = 100]
-P0_0_2__20 -> P0_0_2__21 [label = <>, weight = 100]
-P0_0_1__13 -> P0_0_1__14 [label = <>, weight = 100]
-P0_0_0__13 -> P0_0_0__14 [label = <>, weight = 100]
+{rank = same; P__14 P0_0__13 P0_1__15}
+P0_1__15 -> P0_1__16 [label = <>, weight = 100]
+P0_1__16 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{43}</FONT><FONT COLOR="blue">event</FONT> Client_Init_Auth(username_4,rpid_5)</TD></TR></TABLE>>]
+P0_1__16 -> P0_1__17 [label = <>, weight = 100]
+P0_1__17 -> P0_1__18 [label = <>, weight = 100]
+P0_0__13 -> P0_0__14 [label = <>, weight = 100]
+{rank = same; P0_0__14 P0_1__18}
+P0_1__18 -> P0_1__19 [label = <>, weight = 100]
+P0_0__14 -> P0_0__15 [label = <>, weight = 100]
+{rank = same; P0_0__15 P0_1__19}
+P0_1__19 -> P0_0__15 [label = <~X_1>, arrowhead = normal]
+P0_1__19 -> P0_1__20 [label = <>, weight = 100]
+P0_0__15 -> P0_0__16 [label = <>, weight = 100]
+{rank = same; P0_0__16 P0_1__20}
+P0_0__16 -> P0_0__17 [label = <>, weight = 100]
+P0_0__17 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{71}</FONT><FONT COLOR="blue">get </FONT>auth_record(senc(Auth1(username_4,rpid_5,<br/>
+skA_2),wk_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{61}</FONT><FONT COLOR="blue">new </FONT>dh_spairA_1</TD></TR></TABLE>>]
+P0_0__17 -> P0_0__18 [label = <>, weight = 100]
 P__14 -> P__15 [label = <>, weight = 100]
-{rank = same; P__15 P0_0_0__14 P0_0_1__14 P0_0_2__21 P0_0_3__24}
-P0_0_3__24 -> P0_0_3__25 [label = <>, weight = 100]
-P__15 -> P__16 [label = <>, weight = 100]
-{rank = same; P__16 P0_0_3__25}
-P0_0_3__25 -> P__16 [label = <(~M_6,~M_7,~M_8) = (rpid_5,challenge_5,senc(Auth1(<br/>
-username_5,rpid_5,skA_2),wk_2))>, arrowhead = normal]
-P0_0_3__25 -> P0_0_3__26 [label = <>, weight = 100]
-P0_0_2__21 -> P0_0_2__22 [label = <>, weight = 100]
-P0_0_1__14 -> P0_0_1__15 [label = <>, weight = 100]
-P0_0_0__14 -> P0_0_0__15 [label = <>, weight = 100]
-P__16 -> P__17 [label = <>, weight = 100]
-{rank = same; P__17 P0_0_0__15 P0_0_1__15 P0_0_2__22 P0_0_3__26}
-P0_0_4__27 -> P0_0_4__28 [label = <>, weight = 100]
-P0_0_3__26 -> P0_0_3__27 [label = <>, weight = 100]
-{rank = same; P0_0_3__27 P0_0_4__28}
-P0_0_4__28 -> P0_0_4__29 [label = <>, weight = 100]
-P0_0_3__27 -> P0_0_3__28 [label = <>, weight = 100]
-{rank = same; P0_0_3__28 P0_0_4__29}
-P0_0_4__29 -> P0_0_3__28 [label = <(rpid_5,challenge_5,senc(Auth1(username_5,rpid_5,<br/>
-skA_2),wk_2))>, dir = back, arrowhead = normal]
-P0_0_4__29 -> P0_0_4__30 [label = <>, weight = 100]
-P0_0_3__28 -> P0_0_3__29 [label = <>, weight = 100]
-{rank = same; P0_0_3__29 P0_0_4__30}
-P0_0_4__30 -> P0_0_4__31 [label = <>, weight = 100]
-P0_0_3__29 -> P0_0_3__30 [label = <>, weight = 100]
-P0_0_2__22 -> P0_0_2__23 [label = <>, weight = 100]
-P0_0_1__15 -> P0_0_1__16 [label = <>, weight = 100]
-P0_0_0__15 -> P0_0_0__16 [label = <>, weight = 100]
-P__17 -> P__18 [label = <>, weight = 100]
-{rank = same; P__18 P0_0_0__16 P0_0_1__16 P0_0_2__23 P0_0_3__30 P0_0_4__31}
-P0_0_4__31 -> P0_0_4__32 [label = <>, weight = 100]
-P__18 -> P__19 [label = <>, weight = 100]
-{rank = same; P__19 P0_0_4__32}
-P0_0_4__32 -> P__19 [label = <(~M_9,~M_10,~M_11) = (rpid_5,challenge_5,senc(<br/>
-Auth1(username_5,rpid_5,skA_2),wk_2))>, arrowhead = normal]
-P0_0_4__32 -> P0_0_4__33 [label = <>, weight = 100]
-P0_0_3__30 -> P0_0_3__31 [label = <>, weight = 100]
-P0_0_2__23 -> P0_0_2__24 [label = <>, weight = 100]
-P0_0_1__16 -> P0_0_1__17 [label = <>, weight = 100]
-P0_0_0__16 -> P0_0_0__17 [label = <>, weight = 100]
-P__19 -> P__20 [label = <>, weight = 100]
-{rank = same; P__20 P0_0_0__17 P0_0_1__17 P0_0_2__24 P0_0_3__31 P0_0_4__33}
-P0_0_4__33 -> P0_0_4__34 [label = <>, weight = 100]
-P0_0_3__31 -> P0_0_3__32 [label = <>, weight = 100]
-P0_0_2__24 -> P0_0_2__25 [label = <>, weight = 100]
-{rank = same; P0_0_2__25 P0_0_3__32 P0_0_4__34}
-P0_0_4__34 -> P0_0_4__35 [label = <>, weight = 100]
-P0_0_2__25 -> P0_0_2__26 [label = <>, weight = 100]
-{rank = same; P0_0_2__26 P0_0_4__35}
-P0_0_4__35 -> P0_0_2__26 [label = <(rpid_5,challenge_5,senc(Auth1(username_5,rpid_5,<br/>
-skA_2),wk_2))>, arrowhead = normal]
-P0_0_4__35 -> P0_0_4__36 [label = <>, weight = 100]
-P0_0_3__32 -> P0_0_3__33 [label = <>, weight = 100]
-P0_0_2__26 -> P0_0_2__27 [label = <>, weight = 100]
-{rank = same; P0_0_2__27 P0_0_3__33 P0_0_4__36}
-P0_0_2__27 -> P0_0_2__28 [label = <>, weight = 100]
-P0_0_1__17 -> P0_0_1__18 [label = <>, weight = 100]
-P0_0_0__17 -> P0_0_0__18 [label = <>, weight = 100]
-P__20 -> P__21 [label = <>, weight = 100]
-{rank = same; P__21 P0_0_0__18 P0_0_1__18 P0_0_2__28}
-P0_0_2__28 -> P0_0_2__29 [label = <>, weight = 100]
-P__21 -> P__22 [label = <>, weight = 100]
-{rank = same; P__22 P0_0_2__29}
-P0_0_2__29 -> P__22 [label = <(~M_12,~M_13,~M_14) = (rpid_5,challenge_5,senc(<br/>
-Auth1(username_5,rpid_5,skA_2),wk_2))>, arrowhead = normal]
-P0_0_2__29 -> P0_0_2__30 [label = <>, weight = 100]
-P0_0_1__18 -> P0_0_1__19 [label = <>, weight = 100]
-P0_0_0__18 -> P0_0_0__19 [label = <>, weight = 100]
-P__22 -> P__23 [label = <>, weight = 100]
-{rank = same; P__23 P0_0_0__19 P0_0_1__19 P0_0_2__30}
-P0_0_3__33 -> P0_0_3__34 [label = <>, weight = 100]
-P0_0_2__30 -> P0_0_2__31 [label = <>, weight = 100]
-{rank = same; P0_0_2__31 P0_0_3__34}
-P0_0_3__34 -> P0_0_3__35 [label = <>, weight = 100]
-P0_0_2__31 -> P0_0_2__32 [label = <>, weight = 100]
-{rank = same; P0_0_2__32 P0_0_3__35}
-P0_0_3__35 -> P0_0_2__32 [label = <(rpid_5,challenge_5,senc(Auth1(username_5,rpid_5,<br/>
-skA_2),wk_2))>, dir = back, arrowhead = normal]
-P0_0_3__35 -> P0_0_3__36 [label = <>, weight = 100]
-P0_0_2__32 -> P0_0_2__33 [label = <>, weight = 100]
-{rank = same; P0_0_2__33 P0_0_3__36}
-P0_0_3__36 -> P0_0_3__37 [label = <>, weight = 100]
-P0_0_2__33 -> P0_0_2__34 [label = <>, weight = 100]
-P0_0_1__19 -> P0_0_1__20 [label = <>, weight = 100]
-P0_0_0__19 -> P0_0_0__20 [label = <>, weight = 100]
-P__23 -> P__24 [label = <>, weight = 100]
-{rank = same; P__24 P0_0_0__20 P0_0_1__20 P0_0_2__34 P0_0_3__37}
-P0_0_3__37 -> P0_0_3__38 [label = <>, weight = 100]
-P__24 -> P__25 [label = <>, weight = 100]
-{rank = same; P__25 P0_0_3__38}
-P0_0_3__38 -> P__25 [label = <(~M_15,~M_16,~M_17) = (rpid_5,challenge_5,senc(<br/>
-Auth1(username_5,rpid_5,skA_2),wk_2))>, arrowhead = normal]
-P0_0_3__38 -> P0_0_3__39 [label = <>, weight = 100]
-P0_0_2__34 -> P0_0_2__35 [label = <>, weight = 100]
-P0_0_1__20 -> P0_0_1__21 [label = <>, weight = 100]
-P0_0_0__20 -> P0_0_0__21 [label = <>, weight = 100]
-P__25 -> P__26 [label = <>, weight = 100]
-{rank = same; P__26 P0_0_0__21 P0_0_1__21 P0_0_2__35 P0_0_3__39}
-P0_0_4__36 -> P0_0_4__37 [label = <>, weight = 100]
-P0_0_3__39 -> P0_0_3__40 [label = <>, weight = 100]
-{rank = same; P0_0_3__40 P0_0_4__37}
-P0_0_4__37 -> P0_0_4__38 [label = <>, weight = 100]
-P0_0_3__40 -> P0_0_3__41 [label = <>, weight = 100]
-{rank = same; P0_0_3__41 P0_0_4__38}
-P0_0_4__38 -> P0_0_3__41 [label = <(rpid_5,challenge_5,senc(Auth1(username_5,rpid_5,<br/>
-skA_2),wk_2))>, dir = back, arrowhead = normal]
-P0_0_4__38 -> P0_0_4__39 [label = <>, weight = 100]
-P0_0_3__41 -> P0_0_3__42 [label = <>, weight = 100]
-{rank = same; P0_0_3__42 P0_0_4__39}
-P0_0_4__39 -> P0_0_4__40 [label = <>, weight = 100]
-P0_0_3__42 -> P0_0_3__43 [label = <>, weight = 100]
-P0_0_2__35 -> P0_0_2__36 [label = <>, weight = 100]
-P0_0_1__21 -> P0_0_1__22 [label = <>, weight = 100]
-P0_0_0__21 -> P0_0_0__22 [label = <>, weight = 100]
-P__26 -> P__27 [label = <>, weight = 100]
-{rank = same; P__27 P0_0_0__22 P0_0_1__22 P0_0_2__36 P0_0_3__43 P0_0_4__40}
-P0_0_4__40 -> P0_0_4__41 [label = <>, weight = 100]
-P__27 -> P__28 [label = <>, weight = 100]
-{rank = same; P__28 P0_0_4__41}
-P0_0_4__41 -> P__28 [label = <~M_18 = sanity2>, arrowhead = normal]
-P0_0_4__41 -> P0_0_4__42 [label = <>, weight = 100]
-P0_0_3__43 -> P0_0_3__44 [label = <>, weight = 100]
-P0_0_2__36 -> P0_0_2__37 [label = <>, weight = 100]
-P0_0_1__22 -> P0_0_1__23 [label = <>, weight = 100]
-P0_0_0__22 -> P0_0_0__23 [label = <>, weight = 100]
-P__28 -> P__29 [label = <>, weight = 100]
-{rank = same; P__29 P0_0_0__23 P0_0_1__23 P0_0_2__37 P0_0_3__44 P0_0_4__42}
-P__29 -> P__30 [label = <>, weight = 100]
-P__30 [color = red, shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>The attacker has the message ~M_18 = sanity2</TD></TR></TABLE>>]
-P__30 -> P__31 [label = <>, weight = 100]
-}
+{rank = same; P__15 P0_0__17}
+P0_0__18 -> P0_0__19 [label = <>, weight = 100]
+P0_0__19 [color = red, shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{65}</FONT><FONT COLOR="blue">event</FONT> Authnr_Finish_Auth(username_4,aaguid_4,<br/>
+senc(Auth1(username_4,rpid_5,skA_2),wk_2),spk(<br/>
+skA_2))</TD></TR></TABLE>>]
+P0_0__19 -> P0_0__20 [label = <>, weight = 100]
+Abbrev [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR> <TD> Abbreviations </TD></TR><TR><TD>~M_1 = nonce_4</TD></TR><TR><TD>~M_2 = rpid_5</TD></TR><TR><TD>~M_3 = senc(Auth1(username_4,rpid_5,skA_2),wk_2)</TD></TR><TR><TD>~M_4 = dhexp(g,dh_spairRP_2)</TD></TR><TR><TD>~M_5 = sign(RP1(nonce_4,rpid_5,senc(Auth1(username_4,<br/>
+rpid_5,skA_2),wk_2),dhexp(g,dh_spairRP_2)),sskey_RP_3)</TD></TR><TR><TD>~X_1 = (hash(Client1(rpid_5,nonce_4)),HMAC(pinAuth_3,<br/>
+hash(Client1(rpid_5,nonce_4))),RP1(nonce_4,rpid_5,<br/>
+senc(Auth1(username_4,rpid_5,skA_2),wk_2),dhexp(<br/>
+g,dh_spairRP_2)),sign(RP1(nonce_4,rpid_5,senc(<br/>
+Auth1(username_4,rpid_5,skA_2),wk_2),dhexp(g,dh_spairRP_2)),<br/>
+sskey_RP_3))</TD></TR></TABLE>>]Abbrev -> P__0 [style = invisible, weight =100]}
