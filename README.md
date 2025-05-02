@@ -94,8 +94,6 @@ The `FIDO2WebServer` folder contains a basic Flask implementation of the FIDO2 p
     flask run
     ```
 
-Please see the `FIDO2WebServer/README.md` file for more details.
-
 ---
 
 ## Notes
