@@ -1,0 +1,85 @@
+<form id="register-form">
+    Username: <input type="text" name="username" id="username" required>
+    <button type="submit">Register with Security Key</button>
+  </form>
+  <div id="msg"></div>
+  <script>
+  async function bufferDecode(value) {
+    return Uint8Array.from(atob(value.replace(/_/g, '/').replace(/-/g, '+')), c => c.charCodeAt(0));
+  }
+  
+  document.getElementById('register-form').onsubmit = async (e) => {
+  e.preventDefault();
+  let username = document.getElementById('username').value;
+
+  let resp = await fetch('/register/begin', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({username})
+  });
+
+  if (!resp.ok) {
+    document.getElementById('msg').innerText = "Error: Username taken";
+    return;
+  }
+
+  let options = await resp.json();
+  console.log(options);
+  console.log('challenge:', options);
+  console.log('typeof challenge:', typeof options);
+  // Defensive: ensure challenge and user.id exist before calling .replace
+  if (!options.challenge || typeof options.challenge !== 'string') {
+    document.getElementById('msg').innerText = "No challenge in server response!";
+    return;
+  }
+  if (!options.user || !options.user.id || typeof options.user.id !== 'string') {
+    document.getElementById('msg').innerText = "No user.id in server response!";
+    return;
+  }
+
+  // Convert base64url string to Uint8Array - correct order of replace!
+  function base64urlToBytes(s) {
+    s = s.replace(/-/g, '+').replace(/_/g, '/'); // url->plain
+    while (s.length % 4) s += '=';
+    return Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  }
+
+  options.challenge = base64urlToBytes(options.challenge);
+  options.user.id = base64urlToBytes(options.user.id);
+
+  let cred;
+  try {
+    cred = await navigator.credentials.create({publicKey: options});
+  } catch (e) {
+    document.getElementById('msg').innerText = "Credential create error: " + e;
+    return;
+  }
+
+  // Convert ArrayBuffers to base64url for server
+  function bufferToBase64url(buffer) {
+    let str = String.fromCharCode(...new Uint8Array(buffer));
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  let credential = {
+    id: cred.id,
+    rawId: bufferToBase64url(cred.rawId),
+    type: cred.type,
+    response: {
+      attestationObject: bufferToBase64url(cred.response.attestationObject),
+      clientDataJSON: bufferToBase64url(cred.response.clientDataJSON),
+    }
+  };
+
+  let finalResp = await fetch('/register/complete', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({username, credential})
+  });
+  let data = await finalResp.json();
+  if (data.success)
+    document.getElementById('msg').innerText = "Registration complete!";
+  else
+    document.getElementById('msg').innerText = "Error registering.";
+};
+  </script>

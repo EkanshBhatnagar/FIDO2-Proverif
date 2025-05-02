@@ -159,7 +159,6 @@ let RP_Auth(rpid:RpId, sskey_RP:sskey) =
     out(reveal, sanity1);
     
     (* Record successful authentication event *)
-    
     event Server_Finish_Auth(username,rpid,aaguid,credID_A,pkA);
     (* Issue bearer token to client *)
     let ck = dhexp(dh_ppairA, dh_spairRP) in
