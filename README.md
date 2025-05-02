@@ -71,6 +71,32 @@ proverif -graph <results_folder> <model_file.pv>
 
 ---
 
+## FIDO2WebServer
+
+The `FIDO2WebServer` folder contains a basic Flask implementation of the FIDO2 protocol. This is intended for testing and demonstration purposes alongside the ProVerif models.
+
+**Features:**
+- Sample FIDO2 registration and authentication endpoints
+- Reference implementation to facilitate integration with hardware authenticators or browser clients
+
+**Usage:**
+1. Navigate into the `FIDO2WebServer` directory:
+    ```bash
+    cd FIDO2WebServer
+    ```
+2. Install dependencies (requires Python 3):
+    ```bash
+    pip install -r requirements.txt
+    ```
+3. Run the server:
+    ```bash
+    flask run
+    ```
+
+Please see the `FIDO2WebServer/README.md` file for more details.
+
+---
+
 ## Notes
 
 - This repository is **under development**. Some parts of the code may lack detailed comments, and certain models might contain debug code.
