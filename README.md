@@ -7,6 +7,7 @@
 - [Installation](#installation)
 - [Running ProVerif Models](#running-proverif-models)
 - [Model Descriptions](#model-descriptions)
+- [FIDO2WebServer](#fido2webserver)
 - [Notes](#notes)
 
 ---
