@@ -38,6 +38,7 @@ type AAGUID.        (* Authenticator Attestation GUID - identifies the authentic
 
 (* Channel declarations *)
 free reveal: channel.           (* Channel for the compromised load balancer to leak information *)
+table stolen_tokens(bitstring).
 
 (* Private channels for secure communication - Modelling TLS between client, load balancer and relying party. *)
 free C_LB: channel [private].   (* Client to Load Balancer *)
@@ -83,6 +84,7 @@ table auth_record(bitstring).                        (* Authenticator stores cre
 event Client_Init_Auth(Username, RpId).                             (* Client initiates auth *)
 event Authnr_Finish_Auth(Username,AAGUID,bitstring,spkey).          (* Authenticator finishes auth *)
 event Server_Finish_Auth(Username,RpId,AAGUID,bitstring,spkey).     (* Server completes auth *)
+event AttackerUsesToken(bitstring).
 
 (* Sanity check variables *)
 free sanity1:bitstring [private].
@@ -92,7 +94,7 @@ free sanity3:bitstring [private].
 (* Security queries *)
 query attacker(sanity1).     (* Check if sanity1 is revealed by the load balancer *)
 (*query attacker(sanity2).*)     (* Check if sanity2 is revealed by the load balancer *)
-
+query t:bitstring; event(AttackerUsesToken(t)).
 (*query attacker(bear_token).  (*Check if the bearer token remains secret *)*)
 query u:Username, a:AAGUID, c:bitstring, pkau:spkey; event(Authnr_Finish_Auth(u,a,c,pkau)). (* Check if authenticator auth events occur *)
 
@@ -179,33 +181,32 @@ let Auth_Auth(aaguid:AAGUID, wk:key, pinAuthToken:key) =
     out(A_C, (aData, sig))
 .   
 
-(* Load Balancer Process - acts as a man-in-the-middle that reveals traffic *)
+(* Load Balancer Process - with malicious intent *)
 let LoadBalancer() =
-    (* Receive username from client *)
-    in(C_LB, username:Username);
-    (* Reveal first sanity check and username to attacker *)
-    out(reveal, username);
-    (* Forward username to RP *)
-    out(LB_RP, username);
-    (* Receive challenge from RP *)
-    in(LB_RP, (rpid:RpId, challenge:Nonce, credID:bitstring));
-    (* Reveal challenge data to attacker *)
-    out(reveal, (rpid, challenge, credID));
-    (* Forward challenge to client *)
-    out(C_LB, (rpid, challenge, credID));
-    (* Receive authentication response from client *)
-    in(C_LB, (aData:bitstring, sig:bitstring, cdata:bitstring));
-    (* Reveal authentication response to attacker *)
-    out(reveal, (aData, sig, cdata));
-    (* Forward authentication response to RP *)
-    out(LB_RP, (aData, sig, cdata));
-    (* Receive token from RP *)
-    
-    in(LB_RP, token:bitstring);
-    (* Reveal second sanity check to attacker *)
-    out(reveal, token);
-    (* Forward token to client *)
-    out(C_LB, token)
+    (
+        (* Behavior 1: Relay traffic and steal the bear token *)
+        in(C_LB, username:Username);
+        out(reveal, username);
+        out(LB_RP, username);
+        in(LB_RP, (rpid:RpId, challenge:Nonce, credID:bitstring));
+        out(reveal, (rpid, challenge, credID));
+        out(C_LB, (rpid, challenge, credID));
+        in(C_LB, (aData:bitstring, sig:bitstring, cdata:bitstring));
+        out(reveal, (aData, sig, cdata));
+        out(LB_RP, (aData, sig, cdata));
+        in(LB_RP, token:bitstring);
+
+        (* The load balancer reveals the token AND stores it for later *)
+        out(reveal, token);
+        insert stolen_tokens(token);
+
+        out(C_LB, token)
+    )
+    |
+    (
+        get stolen_tokens(stolen_token:bitstring) in
+        event AttackerUsesToken(stolen_token)
+    )
 .
 
 (* Main Process *)
