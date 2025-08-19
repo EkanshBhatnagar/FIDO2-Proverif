@@ -10,9 +10,8 @@ P__0 [label = "Attacker", shape = plaintext]
 Trace -> P0__0 [label = "", style = invisible, weight = 100]{rank = same; P0__0 P__0}
 P0__0 -> P0__1 [label = <>, weight = 100]
 P0__1 -> P0__2 [label = <>, weight = 100]
-P0__2 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{1}</FONT><FONT COLOR="blue">new </FONT>rpid_5</TD></TR><TR><TD><FONT COLOR="darkgreen">{2}</FONT><FONT COLOR="blue">new </FONT>clientid_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{3}</FONT><FONT COLOR="blue">new </FONT>pinAuth_3</TD></TR><TR><TD><FONT COLOR="darkgreen">{4}</FONT><FONT COLOR="blue">new </FONT>wk_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{5}</FONT><FONT COLOR="blue">new </FONT>aaguid_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{6}</FONT><FONT COLOR="blue">new </FONT>username_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{7}</FONT><FONT COLOR="blue">new </FONT>skA_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{8}</FONT><FONT COLOR="blue">new </FONT>sskey_RP_3</TD></TR><TR><TD><FONT COLOR="darkgreen">{10}</FONT><FONT COLOR="blue">insert </FONT>rp_record(username_4,aaguid_4,senc(<br/>
-Auth1(username_4,rpid_5,skA_2),wk_2),spk(skA_2))<br/>
-</TD></TR><TR><TD><FONT COLOR="darkgreen">{11}</FONT><FONT COLOR="blue">insert </FONT>auth_record(senc(Auth1(username_4,rpid_5,<br/>
+P0__2 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{1}</FONT><FONT COLOR="blue">new </FONT>rpid_5</TD></TR><TR><TD><FONT COLOR="darkgreen">{2}</FONT><FONT COLOR="blue">new </FONT>clientid_1</TD></TR><TR><TD><FONT COLOR="darkgreen">{3}</FONT><FONT COLOR="blue">new </FONT>pinAuth_3</TD></TR><TR><TD><FONT COLOR="darkgreen">{4}</FONT><FONT COLOR="blue">new </FONT>wk_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{5}</FONT><FONT COLOR="blue">new </FONT>aaguid_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{6}</FONT><FONT COLOR="blue">new </FONT>username_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{7}</FONT><FONT COLOR="blue">new </FONT>skA_2</TD></TR><TR><TD><FONT COLOR="darkgreen">{9}</FONT><FONT COLOR="blue">insert </FONT>rp_record(username_4,aaguid_4,senc(Auth1(<br/>
+username_4,rpid_5,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{10}</FONT><FONT COLOR="blue">insert </FONT>auth_record(senc(Auth1(username_4,rpid_5,<br/>
 skA_2),wk_2))</TD></TR></TABLE>>]
 P0__2 -> P0__3 [label = <>, weight = 100]
 P__0 -> P__1 [label = <>, weight = 100]
@@ -59,8 +58,8 @@ P0_0__8 -> P0_0__9 [label = <>, weight = 100]
 P__6 -> P__7 [label = <>, weight = 100]
 {rank = same; P__7 P0_0__9 P0_1__10 P0_2__8}
 P0_2__8 -> P0_2__9 [label = <>, weight = 100]
-P0_2__9 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{34}</FONT><FONT COLOR="blue">get </FONT>rp_record(username_4,aaguid_4,senc(Auth1(<br/>
-username_4,rpid_5,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{15}</FONT><FONT COLOR="blue">new </FONT>nonce_4</TD></TR><TR><TD><FONT COLOR="darkgreen">{16}</FONT><FONT COLOR="blue">new </FONT>dh_spairRP_2</TD></TR></TABLE>>]
+P0_2__9 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{22}</FONT><FONT COLOR="blue">get </FONT>rp_record(username_4,aaguid_4,senc(Auth1(<br/>
+username_4,rpid_5,skA_2),wk_2),spk(skA_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{13}</FONT><FONT COLOR="blue">new </FONT>challenge_4</TD></TR></TABLE>>]
 P0_2__9 -> P0_2__10 [label = <>, weight = 100]
 P__7 -> P__8 [label = <>, weight = 100]
 {rank = same; P__8 P0_2__9}
@@ -72,7 +71,8 @@ P__8 -> P__9 [label = <>, weight = 100]
 P0_2__11 -> P0_2__12 [label = <>, weight = 100]
 P__9 -> P__10 [label = <>, weight = 100]
 {rank = same; P__10 P0_2__12}
-P0_2__12 -> P__10 [label = <(RP1(~M_1,~M_2,~M_3,~M_4),~M_5)>, arrowhead = normal]
+P0_2__12 -> P__10 [label = <(~M_1,~M_2,~M_3) = (rpid_5,challenge_4,senc(Auth1(<br/>
+username_4,rpid_5,skA_2),wk_2))>, arrowhead = normal]
 P0_2__12 -> P0_2__13 [label = <>, weight = 100]
 P0_1__11 -> P0_1__12 [label = <>, weight = 100]
 P0_0__10 -> P0_0__11 [label = <>, weight = 100]
@@ -85,13 +85,14 @@ P__11 -> P__12 [label = <>, weight = 100]
 P0_1__13 -> P0_1__14 [label = <>, weight = 100]
 P__12 -> P__13 [label = <>, weight = 100]
 {rank = same; P__13 P0_1__14}
-P0_1__14 -> P__13 [label = <(RP1(~M_1,~M_2,~M_3,~M_4),~M_5)>, dir = back, arrowhead = normal]
+P0_1__14 -> P__13 [label = <(a,a_1,~M_3) = (a,a_1,senc(Auth1(username_4,rpid_5,<br/>
+skA_2),wk_2))>, dir = back, arrowhead = normal]
 P0_1__14 -> P0_1__15 [label = <>, weight = 100]
 P0_0__12 -> P0_0__13 [label = <>, weight = 100]
 P__13 -> P__14 [label = <>, weight = 100]
 {rank = same; P__14 P0_0__13 P0_1__15}
 P0_1__15 -> P0_1__16 [label = <>, weight = 100]
-P0_1__16 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{43}</FONT><FONT COLOR="blue">event</FONT> Client_Init_Auth(username_4,rpid_5)</TD></TR></TABLE>>]
+P0_1__16 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{30}</FONT><FONT COLOR="blue">event</FONT> Client_Init_Auth(username_4,a)</TD></TR></TABLE>>]
 P0_1__16 -> P0_1__17 [label = <>, weight = 100]
 P0_1__17 -> P0_1__18 [label = <>, weight = 100]
 P0_0__13 -> P0_0__14 [label = <>, weight = 100]
@@ -99,25 +100,20 @@ P0_0__13 -> P0_0__14 [label = <>, weight = 100]
 P0_1__18 -> P0_1__19 [label = <>, weight = 100]
 P0_0__14 -> P0_0__15 [label = <>, weight = 100]
 {rank = same; P0_0__15 P0_1__19}
-P0_1__19 -> P0_0__15 [label = <~X_1>, arrowhead = normal]
+P0_1__19 -> P0_0__15 [label = <(hash(Client1(a,a_1)),senc(Auth1(username_4,rpid_5,<br/>
+skA_2),wk_2),HMAC(pinAuth_3,hash(Client1(a,a_1))))>, arrowhead = normal]
 P0_1__19 -> P0_1__20 [label = <>, weight = 100]
 P0_0__15 -> P0_0__16 [label = <>, weight = 100]
 {rank = same; P0_0__16 P0_1__20}
 P0_0__16 -> P0_0__17 [label = <>, weight = 100]
-P0_0__17 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{71}</FONT><FONT COLOR="blue">get </FONT>auth_record(senc(Auth1(username_4,rpid_5,<br/>
-skA_2),wk_2))</TD></TR><TR><TD><FONT COLOR="darkgreen">{61}</FONT><FONT COLOR="blue">new </FONT>dh_spairA_1</TD></TR></TABLE>>]
+P0_0__17 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{45}</FONT><FONT COLOR="blue">get </FONT>auth_record(senc(Auth1(username_4,rpid_5,<br/>
+skA_2),wk_2))</TD></TR></TABLE>>]
 P0_0__17 -> P0_0__18 [label = <>, weight = 100]
 P__14 -> P__15 [label = <>, weight = 100]
 {rank = same; P__15 P0_0__17}
 P0_0__18 -> P0_0__19 [label = <>, weight = 100]
-P0_0__19 [color = red, shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{65}</FONT><FONT COLOR="blue">event</FONT> Authnr_Finish_Auth(username_4,aaguid_4,<br/>
+P0_0__19 [color = red, shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{43}</FONT><FONT COLOR="blue">event</FONT> Authnr_Finish_Auth(username_4,aaguid_4,<br/>
 senc(Auth1(username_4,rpid_5,skA_2),wk_2),spk(<br/>
 skA_2))</TD></TR></TABLE>>]
 P0_0__19 -> P0_0__20 [label = <>, weight = 100]
-Abbrev [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR> <TD> Abbreviations </TD></TR><TR><TD>~M_1 = nonce_4</TD></TR><TR><TD>~M_2 = rpid_5</TD></TR><TR><TD>~M_3 = senc(Auth1(username_4,rpid_5,skA_2),wk_2)</TD></TR><TR><TD>~M_4 = dhexp(g,dh_spairRP_2)</TD></TR><TR><TD>~M_5 = sign(RP1(nonce_4,rpid_5,senc(Auth1(username_4,<br/>
-rpid_5,skA_2),wk_2),dhexp(g,dh_spairRP_2)),sskey_RP_3)</TD></TR><TR><TD>~X_1 = (hash(Client1(rpid_5,nonce_4)),HMAC(pinAuth_3,<br/>
-hash(Client1(rpid_5,nonce_4))),RP1(nonce_4,rpid_5,<br/>
-senc(Auth1(username_4,rpid_5,skA_2),wk_2),dhexp(<br/>
-g,dh_spairRP_2)),sign(RP1(nonce_4,rpid_5,senc(<br/>
-Auth1(username_4,rpid_5,skA_2),wk_2),dhexp(g,dh_spairRP_2)),<br/>
-sskey_RP_3))</TD></TR></TABLE>>]Abbrev -> P__0 [style = invisible, weight =100]}
+}
